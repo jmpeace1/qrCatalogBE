@@ -6,6 +6,8 @@ const isValid = (text) => /^\d*(\.\d{0,2})?$/.test(text)
 
 const format = (n) => (Number.isFinite(n) ? n.toFixed(2) : '')
 
+const selectAll = (e) => e.target.select()
+
 function NumberField({ label, value, onChange }) {
   const handleChange = (e) => {
     if (isValid(e.target.value)) onChange(e.target.value)
@@ -27,6 +29,8 @@ function NumberField({ label, value, onChange }) {
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
+        onFocus={selectAll}
+        onClick={selectAll}
       />
     </label>
   )
