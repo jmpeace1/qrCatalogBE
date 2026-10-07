@@ -9,6 +9,7 @@ function App() {
 
   return (
     <>
+      <div className="floating-message">Hello World</div>
       <section id="center">
         <div className="hero">
           <img src={heroImg} className="base" width="170" height="179" alt="" />
