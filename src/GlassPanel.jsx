@@ -6,7 +6,7 @@ const RADIUS = 28
 // Container with a liquid glass background layer sized to match its content.
 // LiquidGlass sizes itself from its children, so a placeholder child is
 // rendered at the measured size and remounted whenever that size changes.
-function GlassPanel({ className = '', children }) {
+function GlassPanel({ className = '', blurAmount = 0.1, children, ...rest }) {
   const ref = useRef(null)
   const [size, setSize] = useState(null)
 
@@ -24,13 +24,13 @@ function GlassPanel({ className = '', children }) {
   }, [])
 
   return (
-    <section ref={ref} className={`glass-panel ${className}`}>
+    <section ref={ref} className={`glass-panel ${className}`} {...rest}>
       {size && (
         <div className="glass-panel-bg" aria-hidden="true">
           <LiquidGlass
             key={`${size.w}x${size.h}`}
             displacementScale={40}
-            blurAmount={0.1}
+            blurAmount={blurAmount}
             saturation={140}
             aberrationIntensity={1.5}
             elasticity={0}

@@ -231,7 +231,12 @@ function App() {
           className="overlay"
           onClick={(e) => e.target === e.currentTarget && setOverlayMode(null)}
         >
-          <section className="overlay-panel" role="dialog" aria-modal="true">
+          <GlassPanel
+            className="overlay-panel"
+            blurAmount={0.6}
+            role="dialog"
+            aria-modal="true"
+          >
             <button
               type="button"
               className="close-button"
@@ -252,7 +257,7 @@ function App() {
               )}
               BCB {BCB_RATES[overlayMode]}
             </button>
-          </section>
+          </GlassPanel>
         </div>
       )}
     </main>
