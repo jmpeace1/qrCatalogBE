@@ -2,14 +2,30 @@ import { useState } from 'react'
 import LiquidGlass from 'liquid-glass-react'
 import './App.css'
 
-function App() {
-  const [amount, setAmount] = useState('')
+function NumberField({ label }) {
+  const [value, setValue] = useState('')
 
   const handleChange = (e) => {
-    const value = e.target.value
-    if (/^\d*(\.\d{0,2})?$/.test(value)) setAmount(value)
+    const next = e.target.value
+    if (/^\d*(\.\d{0,2})?$/.test(next)) setValue(next)
   }
 
+  return (
+    <label className="field">
+      <span className="field-label">{label}</span>
+      <input
+        className="amount-input"
+        type="text"
+        inputMode="decimal"
+        placeholder="0.00"
+        value={value}
+        onChange={handleChange}
+      />
+    </label>
+  )
+}
+
+function App() {
   return (
     <main className="stage">
       <LiquidGlass
@@ -20,7 +36,7 @@ function App() {
         elasticity={0.25}
         cornerRadius={999}
         padding="14px 28px"
-        style={{ position: "fixed", top: "50%", left: "50%" }}
+        style={{ position: 'fixed', top: '50%', left: '50%' }}
       >
         <span className="hello">
           <svg
@@ -36,15 +52,10 @@ function App() {
           Hello World
         </span>
       </LiquidGlass>
-      <input
-        className="amount-input"
-        type="text"
-        inputMode="decimal"
-        placeholder="0.00"
-        aria-label="Amount"
-        value={amount}
-        onChange={handleChange}
-      />
+      <div className="fields">
+        <NumberField label="BOB" />
+        <NumberField label="SUS" />
+      </div>
     </main>
   )
 }
