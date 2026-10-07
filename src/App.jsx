@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import LiquidGlass from 'liquid-glass-react'
 import './App.css'
 
@@ -31,6 +31,7 @@ function NumberField({ label, value, onChange }) {
         className="amount-input"
         type="text"
         inputMode="decimal"
+        enterKeyHint="done"
         name={`${label.toLowerCase()}-amount`}
         autoComplete="off"
         autoCorrect="off"
@@ -43,6 +44,7 @@ function NumberField({ label, value, onChange }) {
         value={value}
         onChange={handleChange}
         onBlur={handleBlur}
+        onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
         onFocus={selectAll}
         onClick={selectAll}
       />
@@ -55,6 +57,18 @@ function App() {
   const [bob, setBob] = useState('')
   const [usd, setUsd] = useState('')
   const [source, setSource] = useState('bob')
+
+  // Tapping outside a field blurs it, which dismisses the mobile keyboard
+  useEffect(() => {
+    const handlePointerDown = (e) => {
+      const active = document.activeElement
+      if (active instanceof HTMLInputElement && !e.target.closest('.field')) {
+        active.blur()
+      }
+    }
+    document.addEventListener('pointerdown', handlePointerDown)
+    return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [])
 
   const bobFromUsd = (usdValue, rate) =>
     usdValue === '' || !rate ? '' : format(parseFloat(usdValue) * rate)
