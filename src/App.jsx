@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useRef, useState } from 'react'
+import { flushSync } from 'react-dom'
 import LiquidGlass from 'liquid-glass-react'
 import './App.css'
 
@@ -8,7 +9,7 @@ const format = (n) => (Number.isFinite(n) ? n.toFixed(2) : '')
 
 const selectAll = (e) => e.target.select()
 
-function NumberField({ label, value, onChange }) {
+function NumberField({ label, value, onChange, tint, inputRef }) {
   const handleChange = (e) => {
     const next = e.target.value
     if (!isValid(next)) return
@@ -28,7 +29,8 @@ function NumberField({ label, value, onChange }) {
     <label className="field">
       <span className="field-label">{label}</span>
       <input
-        className="amount-input"
+        ref={inputRef}
+        className={`amount-input ${tint}`}
         type="text"
         inputMode="decimal"
         enterKeyHint="done"
@@ -61,6 +63,8 @@ function App() {
   const [source, setSource] = useState('bob')
   const [overlayMode, setOverlayMode] = useState(null)
   const [bcbMode, setBcbMode] = useState(null)
+  const bobRef = useRef(null)
+  const usdRef = useRef(null)
 
   // Tapping outside a field blurs it, which dismisses the mobile keyboard
   useEffect(() => {
@@ -106,16 +110,35 @@ function App() {
   }
 
   const handleBcbPress = () => {
-    setBcbMode(overlayMode)
-    handleTcChange(BCB_RATES[overlayMode])
-    setOverlayMode(null)
+    const mode = overlayMode
+    // Flush so the panel is gone and the fields are reordered before focusing
+    flushSync(() => {
+      setBcbMode(mode)
+      handleTcChange(BCB_RATES[mode])
+      setOverlayMode(null)
+    })
+    const input = (mode === 'compra' ? bobRef : usdRef).current
+    input?.focus()
+    input?.select()
   }
 
   const bobField = (
-    <NumberField label="BOB" value={bob} onChange={handleBobChange} />
+    <NumberField
+      label="BOB"
+      tint="tint-blue"
+      inputRef={bobRef}
+      value={bob}
+      onChange={handleBobChange}
+    />
   )
   const usdField = (
-    <NumberField label="USD" value={usd} onChange={handleUsdChange} />
+    <NumberField
+      label="USD"
+      tint="tint-green"
+      inputRef={usdRef}
+      value={usd}
+      onChange={handleUsdChange}
+    />
   )
 
   return (
@@ -169,14 +192,14 @@ function App() {
             className="action-button"
             onClick={() => setOverlayMode('compra')}
           >
-            COMPRA $
+            COMPRA USD
           </button>
           <button
             type="button"
             className="action-button"
             onClick={() => setOverlayMode('venta')}
           >
-            VENTA $
+            VENTA USD
           </button>
         </div>
         <div className="fields">
