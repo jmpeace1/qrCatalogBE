@@ -55,12 +55,28 @@
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.14);
+}
+
+.glass-panel {
+  position: relative;
   border-radius: 28px;
-  background: rgba(38, 40, 46, 0.62);
-  backdrop-filter: blur(24px) saturate(130%);
-  -webkit-backdrop-filter: blur(24px) saturate(130%);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+}
+
+.glass-panel > :not(.glass-panel-bg) {
+  position: relative;
+  z-index: 1;
+}
+
+.glass-panel-bg {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  pointer-events: none;
+}
+
+.glass-panel-tint {
+  border-radius: 28px;
+  background: rgba(38, 40, 46, 0.45);
 }
 
 .pill-slot {
@@ -192,4 +208,9 @@
 
 .amount-input.tint-green:focus {
   border-color: rgba(134, 239, 172, 1);
+}
+
+/* LiquidGlass renders its surface inline-flex, which adds a descender gap */
+.glass-panel-bg .glass {
+  display: flex !important;
 }
