@@ -11,6 +11,11 @@ function NumberField({ label, value, onChange }) {
     if (isValid(e.target.value)) onChange(e.target.value)
   }
 
+  const handleBlur = () => {
+    const formatted = format(parseFloat(value))
+    if (formatted !== value) onChange(formatted)
+  }
+
   return (
     <label className="field">
       <span className="field-label">{label}</span>
@@ -21,6 +26,7 @@ function NumberField({ label, value, onChange }) {
         placeholder="0.00"
         value={value}
         onChange={handleChange}
+        onBlur={handleBlur}
       />
     </label>
   )
