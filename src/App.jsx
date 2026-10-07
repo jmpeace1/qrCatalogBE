@@ -54,7 +54,14 @@ function NumberField({ label, value, onChange, tint, inputRef }) {
   )
 }
 
-const BCB_RATES = { compra: '10.50', venta: '10.40' }
+const RATE_SOURCES = [
+  { key: 'bcb', label: 'BCB', rates: { compra: '10.50', venta: '10.40' } },
+  {
+    key: 'binance',
+    label: 'BINANCE',
+    rates: { compra: '12.50', venta: '12.40' },
+  },
+]
 
 function App() {
   const [tc, setTc] = useState('12.22')
@@ -62,7 +69,8 @@ function App() {
   const [usd, setUsd] = useState('')
   const [source, setSource] = useState('bob')
   const [overlayMode, setOverlayMode] = useState(null)
-  const [bcbMode, setBcbMode] = useState(null)
+  const [rateMode, setRateMode] = useState(null)
+  const [rateSource, setRateSource] = useState(null)
   const bobRef = useRef(null)
   const usdRef = useRef(null)
 
@@ -109,12 +117,13 @@ function App() {
     else setBob(bobFromUsd(usd, rate))
   }
 
-  const handleBcbPress = () => {
+  const handleRatePress = (selected) => {
     const mode = overlayMode
     // Flush so the panel is gone and the fields are reordered before focusing
     flushSync(() => {
-      setBcbMode(mode)
-      handleTcChange(BCB_RATES[mode])
+      setRateMode(mode)
+      setRateSource(selected.key)
+      handleTcChange(selected.rates[mode])
       setOverlayMode(null)
     })
     const input = (mode === 'compra' ? bobRef : usdRef).current
@@ -123,7 +132,7 @@ function App() {
   }
 
   const [pillFrom, pillTo] =
-    bcbMode === 'venta' ? ['USD', 'BOB'] : ['BOB', 'USD']
+    rateMode === 'venta' ? ['USD', 'BOB'] : ['BOB', 'USD']
 
   const bobField = (
     <NumberField
@@ -207,7 +216,7 @@ function App() {
         </div>
         <div className="fields">
           <NumberField label="TC" value={tc} onChange={handleTcChange} />
-          {bcbMode === 'venta' ? (
+          {rateMode === 'venta' ? (
             <>
               {usdField}
               {bobField}
@@ -219,7 +228,7 @@ function App() {
             </>
           )}
           <p className="description">
-            {bcbMode === 'venta'
+            {rateMode === 'venta'
               ? `${usd || '0.00'} dólares son Bs. ${bob || '0.00'} a ${tc || '0.00'}`
               : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares a ${tc || '0.00'}`}
           </p>
@@ -239,18 +248,21 @@ function App() {
             >
               ✕
             </button>
-            <button
-              type="button"
-              className="action-button"
-              onClick={handleBcbPress}
-            >
-              {bcbMode === overlayMode && (
-                <span className="check" aria-label="selected">
-                  ✓
-                </span>
-              )}
-              BCB {BCB_RATES[overlayMode]}
-            </button>
+            {RATE_SOURCES.map((option) => (
+              <button
+                key={option.key}
+                type="button"
+                className="action-button"
+                onClick={() => handleRatePress(option)}
+              >
+                {rateMode === overlayMode && rateSource === option.key && (
+                  <span className="check" aria-label="selected">
+                    ✓
+                  </span>
+                )}
+                {option.label} {option.rates[overlayMode]}
+              </button>
+            ))}
           </section>
         </div>
       )}
