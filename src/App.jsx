@@ -216,8 +216,9 @@ function App() {
             </>
           )}
           <p className="description">
-            &gt; {bob || '0.00'} Bolivianos son {usd || '0.00'} Dólares a{' '}
-            {tc || '0.00'}
+            {bcbMode === 'venta'
+              ? `${usd || '0.00'} dólares son Bs. ${bob || '0.00'} a ${tc || '0.00'}`
+              : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares a ${tc || '0.00'}`}
           </p>
         </div>
       </section>
