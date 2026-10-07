@@ -22,10 +22,6 @@
 }
 
 .amount-input {
-  position: fixed;
-  top: calc(50% + 70px);
-  left: 50%;
-  transform: translateX(-50%);
   width: 200px;
   padding: 12px 20px;
   border: 1px solid rgba(255, 255, 255, 0.45);
@@ -46,4 +42,29 @@
 
 .amount-input:focus {
   border-color: rgba(255, 255, 255, 0.8);
+}
+
+.fields {
+  position: fixed;
+  top: calc(50% + 70px);
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.field-label {
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
 }
