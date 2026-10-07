@@ -1,7 +1,15 @@
+import { useState } from 'react'
 import LiquidGlass from 'liquid-glass-react'
 import './App.css'
 
 function App() {
+  const [amount, setAmount] = useState('')
+
+  const handleChange = (e) => {
+    const value = e.target.value
+    if (/^\d*(\.\d{0,2})?$/.test(value)) setAmount(value)
+  }
+
   return (
     <main className="stage">
       <LiquidGlass
@@ -28,6 +36,15 @@ function App() {
           Hello World
         </span>
       </LiquidGlass>
+      <input
+        className="amount-input"
+        type="text"
+        inputMode="decimal"
+        placeholder="0.00"
+        aria-label="Amount"
+        value={amount}
+        onChange={handleChange}
+      />
     </main>
   )
 }
