@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import LiquidGlass from 'liquid-glass-react'
+import GlassPanel from './GlassPanel'
 import './App.css'
 
 const isValid = (text) => /^\d*(\.\d{0,2})?$/.test(text)
@@ -146,7 +147,7 @@ function App() {
 
   return (
     <main className="stage">
-      <section className="panel">
+      <GlassPanel className="panel">
         <div className="pill-slot">
           <LiquidGlass
             displacementScale={25}
@@ -224,7 +225,7 @@ function App() {
               : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares a ${tc || '0.00'}`}
           </p>
         </div>
-      </section>
+      </GlassPanel>
       {overlayMode && (
         <div
           className="overlay"
