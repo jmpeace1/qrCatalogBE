@@ -122,6 +122,9 @@ function App() {
     input?.select()
   }
 
+  const [pillFrom, pillTo] =
+    bcbMode === 'venta' ? ['USD', 'BOB'] : ['BOB', 'USD']
+
   const bobField = (
     <NumberField
       label="BOB"
@@ -166,7 +169,7 @@ function App() {
               >
                 <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5z" />
               </svg>
-              BOB
+              {pillFrom}
               <svg
                 className="arrow-icon"
                 viewBox="0 0 24 24"
@@ -182,7 +185,7 @@ function App() {
               >
                 <path d="M4 12h16M14 6l6 6-6 6" />
               </svg>
-              USD
+              {pillTo}
             </span>
           </LiquidGlass>
         </div>
