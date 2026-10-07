@@ -2,12 +2,13 @@ import { useState } from 'react'
 import LiquidGlass from 'liquid-glass-react'
 import './App.css'
 
-function NumberField({ label }) {
-  const [value, setValue] = useState('')
+const isValid = (text) => /^\d*(\.\d{0,2})?$/.test(text)
 
+const format = (n) => (Number.isFinite(n) ? n.toFixed(2) : '')
+
+function NumberField({ label, value, onChange }) {
   const handleChange = (e) => {
-    const next = e.target.value
-    if (/^\d*(\.\d{0,2})?$/.test(next)) setValue(next)
+    if (isValid(e.target.value)) onChange(e.target.value)
   }
 
   return (
@@ -26,6 +27,35 @@ function NumberField({ label }) {
 }
 
 function App() {
+  const [tc, setTc] = useState('12.22')
+  const [bob, setBob] = useState('')
+  const [sus, setSus] = useState('')
+  const [source, setSource] = useState('bob')
+
+  const bobFromSus = (susValue, rate) =>
+    susValue === '' || !rate ? '' : format(parseFloat(susValue) * rate)
+  const susFromBob = (bobValue, rate) =>
+    bobValue === '' || !rate ? '' : format(parseFloat(bobValue) / rate)
+
+  const handleBobChange = (value) => {
+    setSource('bob')
+    setBob(value)
+    setSus(susFromBob(value, parseFloat(tc)))
+  }
+
+  const handleSusChange = (value) => {
+    setSource('sus')
+    setSus(value)
+    setBob(bobFromSus(value, parseFloat(tc)))
+  }
+
+  const handleTcChange = (value) => {
+    setTc(value)
+    const rate = parseFloat(value)
+    if (source === 'bob') setSus(susFromBob(bob, rate))
+    else setBob(bobFromSus(sus, rate))
+  }
+
   return (
     <main className="stage">
       <LiquidGlass
@@ -53,8 +83,9 @@ function App() {
         </span>
       </LiquidGlass>
       <div className="fields">
-        <NumberField label="BOB" />
-        <NumberField label="SUS" />
+        <NumberField label="TC" value={tc} onChange={handleTcChange} />
+        <NumberField label="BOB" value={bob} onChange={handleBobChange} />
+        <NumberField label="SUS" value={sus} onChange={handleSusChange} />
       </div>
     </main>
   )

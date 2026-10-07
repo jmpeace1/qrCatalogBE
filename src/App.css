@@ -46,7 +46,7 @@
 
 .fields {
   position: fixed;
-  top: calc(50% + 70px);
+  top: calc(50% + 60px);
   left: 50%;
   transform: translateX(-50%);
   display: flex;
