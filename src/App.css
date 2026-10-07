@@ -165,3 +165,9 @@
   font-size: 1rem;
   cursor: pointer;
 }
+
+.check {
+  margin-right: 8px;
+  color: #3ddc84;
+  font-weight: 800;
+}

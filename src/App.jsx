@@ -52,20 +52,23 @@ function NumberField({ label, value, onChange }) {
   )
 }
 
+const BCB_RATES = { compra: '10.50', venta: '10.40' }
+
 function App() {
   const [tc, setTc] = useState('12.22')
   const [bob, setBob] = useState('')
   const [usd, setUsd] = useState('')
   const [source, setSource] = useState('bob')
-  const [overlayOpen, setOverlayOpen] = useState(false)
+  const [overlayMode, setOverlayMode] = useState(null)
+  const [bcbMode, setBcbMode] = useState(null)
 
   // Tapping outside a field blurs it, which dismisses the mobile keyboard
   useEffect(() => {
-    if (!overlayOpen) return
-    const handleKeyDown = (e) => e.key === 'Escape' && setOverlayOpen(false)
+    if (!overlayMode) return
+    const handleKeyDown = (e) => e.key === 'Escape' && setOverlayMode(null)
     document.addEventListener('keydown', handleKeyDown)
     return () => document.removeEventListener('keydown', handleKeyDown)
-  }, [overlayOpen])
+  }, [overlayMode])
 
   useEffect(() => {
     const handlePointerDown = (e) => {
@@ -101,6 +104,18 @@ function App() {
     if (source === 'bob') setUsd(usdFromBob(bob, rate))
     else setBob(bobFromUsd(usd, rate))
   }
+
+  const handleBcbPress = () => {
+    setBcbMode(overlayMode)
+    handleTcChange(BCB_RATES[overlayMode])
+  }
+
+  const bobField = (
+    <NumberField label="BOB" value={bob} onChange={handleBobChange} />
+  )
+  const usdField = (
+    <NumberField label="USD" value={usd} onChange={handleUsdChange} />
+  )
 
   return (
     <main className="stage">
@@ -151,44 +166,62 @@ function App() {
           <button
             type="button"
             className="action-button"
-            onClick={() => setOverlayOpen(true)}
+            onClick={() => setOverlayMode('compra')}
           >
-            COMPRA
+            COMPRA $
           </button>
           <button
             type="button"
             className="action-button"
-            onClick={() => setOverlayOpen(true)}
+            onClick={() => setOverlayMode('venta')}
           >
-            VENTA
+            VENTA $
           </button>
         </div>
         <div className="fields">
           <NumberField label="TC" value={tc} onChange={handleTcChange} />
-          <NumberField label="BOB" value={bob} onChange={handleBobChange} />
-          <NumberField label="USD" value={usd} onChange={handleUsdChange} />
+          {bcbMode === 'venta' ? (
+            <>
+              {usdField}
+              {bobField}
+            </>
+          ) : (
+            <>
+              {bobField}
+              {usdField}
+            </>
+          )}
           <p className="description">
             &gt; {bob || '0.00'} Bolivianos son {usd || '0.00'} Dólares a{' '}
             {tc || '0.00'}
           </p>
         </div>
       </section>
-      {overlayOpen && (
+      {overlayMode && (
         <div
           className="overlay"
-          onClick={(e) => e.target === e.currentTarget && setOverlayOpen(false)}
+          onClick={(e) => e.target === e.currentTarget && setOverlayMode(null)}
         >
           <section className="overlay-panel" role="dialog" aria-modal="true">
             <button
               type="button"
               className="close-button"
               aria-label="Close"
-              onClick={() => setOverlayOpen(false)}
+              onClick={() => setOverlayMode(null)}
             >
               ✕
             </button>
-            <button type="button" className="action-button">
-              BCB
+            <button
+              type="button"
+              className="action-button"
+              onClick={handleBcbPress}
+            >
+              {bcbMode === overlayMode && (
+                <span className="check" aria-label="selected">
+                  ✓
+                </span>
+              )}
+              BCB {BCB_RATES[overlayMode]}
             </button>
           </section>
         </div>
