@@ -108,6 +108,7 @@ function App() {
   const handleBcbPress = () => {
     setBcbMode(overlayMode)
     handleTcChange(BCB_RATES[overlayMode])
+    setOverlayMode(null)
   }
 
   const bobField = (
