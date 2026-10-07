@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import LiquidGlass from 'liquid-glass-react'
-import GlassPanel from './GlassPanel'
 import './App.css'
 
 const isValid = (text) => /^\d*(\.\d{0,2})?$/.test(text)
@@ -147,7 +146,7 @@ function App() {
 
   return (
     <main className="stage">
-      <GlassPanel className="panel">
+      <section className="panel">
         <div className="pill-slot">
           <LiquidGlass
             displacementScale={25}
@@ -225,18 +224,13 @@ function App() {
               : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares a ${tc || '0.00'}`}
           </p>
         </div>
-      </GlassPanel>
+      </section>
       {overlayMode && (
         <div
           className="overlay"
           onClick={(e) => e.target === e.currentTarget && setOverlayMode(null)}
         >
-          <GlassPanel
-            className="overlay-panel"
-            blurAmount={0.6}
-            role="dialog"
-            aria-modal="true"
-          >
+          <section className="overlay-panel" role="dialog" aria-modal="true">
             <button
               type="button"
               className="close-button"
@@ -257,7 +251,7 @@ function App() {
               )}
               BCB {BCB_RATES[overlayMode]}
             </button>
-          </GlassPanel>
+          </section>
         </div>
       )}
     </main>
