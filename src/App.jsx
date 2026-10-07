@@ -39,31 +39,31 @@ function NumberField({ label, value, onChange }) {
 function App() {
   const [tc, setTc] = useState('12.22')
   const [bob, setBob] = useState('')
-  const [sus, setSus] = useState('')
+  const [usd, setUsd] = useState('')
   const [source, setSource] = useState('bob')
 
-  const bobFromSus = (susValue, rate) =>
-    susValue === '' || !rate ? '' : format(parseFloat(susValue) * rate)
-  const susFromBob = (bobValue, rate) =>
+  const bobFromUsd = (usdValue, rate) =>
+    usdValue === '' || !rate ? '' : format(parseFloat(usdValue) * rate)
+  const usdFromBob = (bobValue, rate) =>
     bobValue === '' || !rate ? '' : format(parseFloat(bobValue) / rate)
 
   const handleBobChange = (value) => {
     setSource('bob')
     setBob(value)
-    setSus(susFromBob(value, parseFloat(tc)))
+    setUsd(usdFromBob(value, parseFloat(tc)))
   }
 
-  const handleSusChange = (value) => {
-    setSource('sus')
-    setSus(value)
-    setBob(bobFromSus(value, parseFloat(tc)))
+  const handleUsdChange = (value) => {
+    setSource('usd')
+    setUsd(value)
+    setBob(bobFromUsd(value, parseFloat(tc)))
   }
 
   const handleTcChange = (value) => {
     setTc(value)
     const rate = parseFloat(value)
-    if (source === 'bob') setSus(susFromBob(bob, rate))
-    else setBob(bobFromSus(sus, rate))
+    if (source === 'bob') setUsd(usdFromBob(bob, rate))
+    else setBob(bobFromUsd(usd, rate))
   }
 
   return (
@@ -95,7 +95,11 @@ function App() {
       <div className="fields">
         <NumberField label="TC" value={tc} onChange={handleTcChange} />
         <NumberField label="BOB" value={bob} onChange={handleBobChange} />
-        <NumberField label="SUS" value={sus} onChange={handleSusChange} />
+        <NumberField label="USD" value={usd} onChange={handleUsdChange} />
+        <p className="description">
+          &gt; {bob || '0.00'} Bolivianos son {usd || '0.00'} Dólares a{' '}
+          {tc || '0.00'}
+        </p>
       </div>
     </main>
   )
