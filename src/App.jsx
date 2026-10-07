@@ -57,8 +57,16 @@ function App() {
   const [bob, setBob] = useState('')
   const [usd, setUsd] = useState('')
   const [source, setSource] = useState('bob')
+  const [overlayOpen, setOverlayOpen] = useState(false)
 
   // Tapping outside a field blurs it, which dismisses the mobile keyboard
+  useEffect(() => {
+    if (!overlayOpen) return
+    const handleKeyDown = (e) => e.key === 'Escape' && setOverlayOpen(false)
+    document.addEventListener('keydown', handleKeyDown)
+    return () => document.removeEventListener('keydown', handleKeyDown)
+  }, [overlayOpen])
+
   useEffect(() => {
     const handlePointerDown = (e) => {
       const active = document.activeElement
@@ -139,6 +147,22 @@ function App() {
             </span>
           </LiquidGlass>
         </div>
+        <div className="actions">
+          <button
+            type="button"
+            className="action-button"
+            onClick={() => setOverlayOpen(true)}
+          >
+            COMPRA
+          </button>
+          <button
+            type="button"
+            className="action-button"
+            onClick={() => setOverlayOpen(true)}
+          >
+            VENTA
+          </button>
+        </div>
         <div className="fields">
           <NumberField label="TC" value={tc} onChange={handleTcChange} />
           <NumberField label="BOB" value={bob} onChange={handleBobChange} />
@@ -149,6 +173,26 @@ function App() {
           </p>
         </div>
       </section>
+      {overlayOpen && (
+        <div
+          className="overlay"
+          onClick={(e) => e.target === e.currentTarget && setOverlayOpen(false)}
+        >
+          <section className="overlay-panel" role="dialog" aria-modal="true">
+            <button
+              type="button"
+              className="close-button"
+              aria-label="Close"
+              onClick={() => setOverlayOpen(false)}
+            >
+              ✕
+            </button>
+            <button type="button" className="action-button">
+              BCB
+            </button>
+          </section>
+        </div>
+      )}
     </main>
   )
 }
