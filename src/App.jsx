@@ -10,7 +10,13 @@ const selectAll = (e) => e.target.select()
 
 function NumberField({ label, value, onChange }) {
   const handleChange = (e) => {
-    if (isValid(e.target.value)) onChange(e.target.value)
+    const next = e.target.value
+    if (!isValid(next)) return
+    onChange(next)
+    if (/\.\d{2}$/.test(next)) {
+      const input = e.target
+      setTimeout(() => input.blur(), 0)
+    }
   }
 
   const handleBlur = () => {
@@ -25,6 +31,14 @@ function NumberField({ label, value, onChange }) {
         className="amount-input"
         type="text"
         inputMode="decimal"
+        name={`${label.toLowerCase()}-amount`}
+        autoComplete="off"
+        autoCorrect="off"
+        autoCapitalize="off"
+        spellCheck={false}
+        data-lpignore="true"
+        data-1p-ignore="true"
+        data-form-type="other"
         placeholder="0.00"
         value={value}
         onChange={handleChange}
