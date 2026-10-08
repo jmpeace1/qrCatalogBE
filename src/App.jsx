@@ -54,12 +54,30 @@ function NumberField({ label, value, onChange, tint, inputRef }) {
   )
 }
 
-const RATE_SOURCES = [
-  { key: 'bcb', label: 'BCB', rates: { compra: '10.50', venta: '10.40' } },
+// Fallback rates, used until /last.json loads (or if it can't be read)
+const DEFAULT_RATES = {
+  BCB_COMPRA: 10.5,
+  BCB_VENTA: 10.4,
+  BINANCE_COMPRA: 12.5,
+  BINANCE_VENTA: 12.4,
+}
+
+const buildRateSources = (rates) => [
+  {
+    key: 'bcb',
+    label: 'BCB',
+    rates: {
+      compra: format(rates.BCB_COMPRA),
+      venta: format(rates.BCB_VENTA),
+    },
+  },
   {
     key: 'binance',
     label: 'BINANCE',
-    rates: { compra: '12.50', venta: '12.40' },
+    rates: {
+      compra: format(rates.BINANCE_COMPRA),
+      venta: format(rates.BINANCE_VENTA),
+    },
   },
 ]
 
@@ -68,11 +86,30 @@ function App() {
   const [bob, setBob] = useState('')
   const [usd, setUsd] = useState('')
   const [source, setSource] = useState('bob')
+  const [rates, setRates] = useState(DEFAULT_RATES)
+  const [updated, setUpdated] = useState('')
   const [overlayMode, setOverlayMode] = useState(null)
   const [rateMode, setRateMode] = useState(null)
   const [rateSource, setRateSource] = useState(null)
   const bobRef = useRef(null)
   const usdRef = useRef(null)
+
+  useEffect(() => {
+    const controller = new AbortController()
+    fetch('/last.json', { cache: 'no-store', signal: controller.signal })
+      .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
+      .then((data) => {
+        const loaded = {}
+        for (const key of Object.keys(DEFAULT_RATES)) {
+          const value = Number(data[key])
+          if (Number.isFinite(value) && value > 0) loaded[key] = value
+        }
+        setRates({ ...DEFAULT_RATES, ...loaded })
+        if (typeof data.UPDATED === 'string') setUpdated(data.UPDATED)
+      })
+      .catch(() => {})
+    return () => controller.abort()
+  }, [])
 
   // Tapping outside a field blurs it, which dismisses the mobile keyboard
   useEffect(() => {
@@ -130,6 +167,8 @@ function App() {
     input?.focus()
     input?.select()
   }
+
+  const rateSources = buildRateSources(rates)
 
   const [pillFrom, pillTo] =
     rateMode === 'venta' ? ['USD', 'BOB'] : ['BOB', 'USD']
@@ -198,6 +237,11 @@ function App() {
             </span>
           </LiquidGlass>
         </div>
+        {updated && (
+          <p className="updated-label">
+            Tipos de Cambio actualizados el {updated}
+          </p>
+        )}
         <div className="actions">
           <button
             type="button"
@@ -248,7 +292,7 @@ function App() {
             >
               ✕
             </button>
-            {RATE_SOURCES.map((option) => (
+            {rateSources.map((option) => (
               <button
                 key={option.key}
                 type="button"
