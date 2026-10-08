@@ -34,6 +34,8 @@
   backdrop-filter: blur(12px) saturate(140%);
   -webkit-backdrop-filter: blur(12px) saturate(140%);
   color: #fff;
+  font-family: 'Inconsolata', monospace;
+  font-optical-sizing: auto;
   font-size: 1.1rem;
   text-align: right;
   outline: none;
@@ -127,6 +129,8 @@
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 999px;
   color: #fff;
+  font-family: 'Inconsolata', monospace;
+  font-optical-sizing: auto;
   font-size: 0.8rem;
   font-weight: 600;
   cursor: pointer;
