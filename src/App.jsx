@@ -253,16 +253,19 @@ function App() {
       setOverlayMode(null)
     })
     const input = (mode === 'compra' ? bobRef : usdRef).current
-    input?.focus()
-    input?.select()
+    // Only jump into the field when it is still empty / 0.00
+    if (input && !parseFloat(input.value)) {
+      input.focus()
+      input.select()
+    }
   }
 
   tcChangeRef.current = changeTc
 
   const descriptionText =
     rateMode === 'venta'
-      ? `${usd || '0.00'} dólares son Bs. ${bob || '0.00'} a ${tc || '0.00'}`
-      : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares a ${tc || '0.00'}`
+      ? `${usd || '0.00'} dólares son Bs. ${bob || '0.00'} a TC ${tc || '0.00'}`
+      : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares a TC ${tc || '0.00'}`
 
   const handleCopy = async () => {
     if (await copyText(descriptionText)) {
@@ -351,9 +354,7 @@ function App() {
           </LiquidGlass>
         </div>
         {updated && (
-          <p className="updated-label">
-            Tipos de Cambio actualizados el {updated}
-          </p>
+          <p className="updated-label">TCs actualizados en {updated}</p>
         )}
         <div className="actions">
           <button
