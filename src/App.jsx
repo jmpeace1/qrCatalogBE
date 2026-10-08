@@ -139,12 +139,14 @@ function App() {
   useEffect(() => {
     const controller = new AbortController()
     let applied = false
-    // Initial TC is the BCB COMPRA rate, unless the user already changed TC
+    // Initial selection is COMPRA / BCB, unless the user already changed TC
     const applyStartupTc = (rate) => {
       if (applied || tcTouched.current) return
       applied = true
       tcChangeRef.current(format(rate))
       tcTouched.current = false
+      setRateMode('compra')
+      setRateSource('bcb')
     }
     fetch('/last.json', { cache: 'no-store', signal: controller.signal })
       .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
@@ -333,6 +335,11 @@ function App() {
             className="action-button"
             onClick={() => setOverlayMode('compra')}
           >
+            {rateMode === 'compra' && (
+              <span className="check" aria-label="selected">
+                ✓
+              </span>
+            )}
             COMPRA USD
           </button>
           <button
@@ -340,6 +347,11 @@ function App() {
             className="action-button"
             onClick={() => setOverlayMode('venta')}
           >
+            {rateMode === 'venta' && (
+              <span className="check" aria-label="selected">
+                ✓
+              </span>
+            )}
             VENTA USD
           </button>
         </div>
