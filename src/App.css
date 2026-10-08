@@ -166,6 +166,9 @@
   align-items: center;
   justify-content: center;
   color: #fff;
+  font-family: 'Clarity City', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
   font-size: 0.95rem;
   text-align: center;
   white-space: normal;
