@@ -63,6 +63,21 @@
   backdrop-filter: blur(24px) saturate(130%);
   -webkit-backdrop-filter: blur(24px) saturate(130%);
   box-shadow: 0 16px 48px rgba(0, 0, 0, 0.35);
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+}
+
+/* Blurred, semi-transparent image behind the panel content */
+.panel::before {
+  content: '';
+  position: absolute;
+  inset: -24px;
+  z-index: -1;
+  background: url('./assets/panel-bg.png') center / cover no-repeat;
+  filter: blur(6px);
+  opacity: 0.45;
+  pointer-events: none;
 }
 
 .pill-slot {
