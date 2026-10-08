@@ -82,7 +82,7 @@ const buildRateSources = (rates) => [
 ]
 
 function App() {
-  const [tc, setTc] = useState('12.22')
+  const [tc, setTc] = useState('')
   const [bob, setBob] = useState('')
   const [usd, setUsd] = useState('')
   const [source, setSource] = useState('bob')
@@ -93,9 +93,19 @@ function App() {
   const [rateSource, setRateSource] = useState(null)
   const bobRef = useRef(null)
   const usdRef = useRef(null)
+  const tcChangeRef = useRef(null)
+  const tcTouched = useRef(false)
 
   useEffect(() => {
     const controller = new AbortController()
+    let applied = false
+    // Initial TC is the BCB COMPRA rate, unless the user already changed TC
+    const applyStartupTc = (rate) => {
+      if (applied || tcTouched.current) return
+      applied = true
+      tcChangeRef.current(format(rate))
+      tcTouched.current = false
+    }
     fetch('/last.json', { cache: 'no-store', signal: controller.signal })
       .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
       .then((data) => {
@@ -104,10 +114,14 @@ function App() {
           const value = Number(data[key])
           if (Number.isFinite(value) && value > 0) loaded[key] = value
         }
-        setRates({ ...DEFAULT_RATES, ...loaded })
+        const next = { ...DEFAULT_RATES, ...loaded }
+        setRates(next)
         if (typeof data.UPDATED === 'string') setUpdated(data.UPDATED)
+        applyStartupTc(next.BCB_COMPRA)
       })
-      .catch(() => {})
+      .catch((err) => {
+        if (err?.name !== 'AbortError') applyStartupTc(DEFAULT_RATES.BCB_COMPRA)
+      })
     return () => controller.abort()
   }, [])
 
@@ -148,6 +162,7 @@ function App() {
   }
 
   const handleTcChange = (value) => {
+    tcTouched.current = true
     setTc(value)
     const rate = parseFloat(value)
     if (source === 'bob') setUsd(usdFromBob(bob, rate))
@@ -167,6 +182,8 @@ function App() {
     input?.focus()
     input?.select()
   }
+
+  tcChangeRef.current = handleTcChange
 
   const rateSources = buildRateSources(rates)
 
