@@ -9,7 +9,7 @@ const format = (n) => (Number.isFinite(n) ? n.toFixed(2) : '')
 
 const selectAll = (e) => e.target.select()
 
-function NumberField({ label, value, onChange, tint, inputRef }) {
+function NumberField({ label, name, value, onChange, tint, inputRef }) {
   const handleChange = (e) => {
     const next = e.target.value
     if (!isValid(next)) return
@@ -34,7 +34,7 @@ function NumberField({ label, value, onChange, tint, inputRef }) {
         type="text"
         inputMode="decimal"
         enterKeyHint="done"
-        name={`${label.toLowerCase()}-amount`}
+        name={`${name}-amount`}
         autoComplete="off"
         autoCorrect="off"
         autoCapitalize="off"
@@ -161,12 +161,20 @@ function App() {
     setBob(bobFromUsd(value, parseFloat(tc)))
   }
 
-  const handleTcChange = (value) => {
+  // Core TC update, also used when a rate option is selected
+  const changeTc = (value) => {
     tcTouched.current = true
     setTc(value)
     const rate = parseFloat(value)
     if (source === 'bob') setUsd(usdFromBob(bob, rate))
     else setBob(bobFromUsd(usd, rate))
+  }
+
+  // Manual TC edits deselect the COMPRA/VENTA choice
+  const handleTcInput = (value) => {
+    setRateMode(null)
+    setRateSource(null)
+    changeTc(value)
   }
 
   const handleRatePress = (selected) => {
@@ -175,7 +183,7 @@ function App() {
     flushSync(() => {
       setRateMode(mode)
       setRateSource(selected.key)
-      handleTcChange(selected.rates[mode])
+      changeTc(selected.rates[mode])
       setOverlayMode(null)
     })
     const input = (mode === 'compra' ? bobRef : usdRef).current
@@ -183,9 +191,14 @@ function App() {
     input?.select()
   }
 
-  tcChangeRef.current = handleTcChange
+  tcChangeRef.current = changeTc
 
   const rateSources = buildRateSources(rates)
+  const selectedSource = rateSources.find((option) => option.key === rateSource)
+  const tcLabel =
+    rateMode && selectedSource
+      ? `TC ${selectedSource.label} ${rateMode === 'compra' ? 'Compra' : 'Venta'}`
+      : 'TC'
 
   const [pillFrom, pillTo] =
     rateMode === 'venta' ? ['USD', 'BOB'] : ['BOB', 'USD']
@@ -193,6 +206,7 @@ function App() {
   const bobField = (
     <NumberField
       label="BOB"
+      name="bob"
       tint="tint-blue"
       inputRef={bobRef}
       value={bob}
@@ -202,6 +216,7 @@ function App() {
   const usdField = (
     <NumberField
       label="USD"
+      name="usd"
       tint="tint-green"
       inputRef={usdRef}
       value={usd}
@@ -276,7 +291,12 @@ function App() {
           </button>
         </div>
         <div className="fields">
-          <NumberField label="TC" value={tc} onChange={handleTcChange} />
+          <NumberField
+            label={tcLabel}
+            name="tc"
+            value={tc}
+            onChange={handleTcInput}
+          />
           {rateMode === 'venta' ? (
             <>
               {usdField}
