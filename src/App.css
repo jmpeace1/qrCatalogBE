@@ -139,18 +139,6 @@
   background: linear-gradient(90deg, #ff7eb3, #b388ff, #7afcff);
 }
 
-/* Blurred, semi-transparent image behind the panel content */
-.panel::before {
-  content: '';
-  position: absolute;
-  inset: -24px;
-  z-index: -1;
-  background: url('./assets/panel-bg.png') center / cover no-repeat;
-  filter: blur(6px);
-  opacity: 0.45;
-  pointer-events: none;
-}
-
 .pill-slot {
   position: relative;
   width: 100%;
