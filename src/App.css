@@ -171,6 +171,14 @@
   padding-right: calc(var(--quick-w) + 8px);
   text-align: center;
   color: #fff;
+  font-family: 'Google Sans Flex', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
+  font-variation-settings:
+    'slnt' 0,
+    'wdth' 100,
+    'GRAD' 0,
+    'ROND' 0;
   font-size: 0.85rem;
   font-weight: 600;
   letter-spacing: 0.12em;
