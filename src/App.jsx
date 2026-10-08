@@ -62,24 +62,32 @@ const DEFAULT_RATES = {
   BINANCE_VENTA: 12.4,
 }
 
-const buildRateSources = (rates) => [
-  {
-    key: 'bcb',
-    label: 'BCB',
-    rates: {
-      compra: format(rates.BCB_COMPRA),
-      venta: format(rates.BCB_VENTA),
-    },
-  },
-  {
-    key: 'binance',
-    label: 'BINANCE',
-    rates: {
-      compra: format(rates.BINANCE_COMPRA),
-      venta: format(rates.BINANCE_VENTA),
-    },
-  },
+// Options shown in the COMPRA USD / VENTA USD panel, in order. Values come
+// from <PREFIX>_COMPRA / <PREFIX>_VENTA in last.json.
+const RATE_OPTIONS = [
+  { key: 'bcb', label: 'BCB', prefix: 'BCB' },
+  { key: 'binance', label: 'BINANCE', prefix: 'BINANCE' },
+  { key: 'bybit', label: 'BYBIT', prefix: 'BYBIT' },
+  { key: 'airtm', label: 'AIRTM', prefix: 'AIRTM' },
 ]
+
+const RATE_KEYS = RATE_OPTIONS.flatMap(({ prefix }) => [
+  `${prefix}_COMPRA`,
+  `${prefix}_VENTA`,
+])
+
+// Options missing from the file (and without a fallback) are left out
+const buildRateSources = (rates) =>
+  RATE_OPTIONS.filter(
+    ({ prefix }) => rates[`${prefix}_COMPRA`] && rates[`${prefix}_VENTA`],
+  ).map(({ key, label, prefix }) => ({
+    key,
+    label,
+    rates: {
+      compra: format(rates[`${prefix}_COMPRA`]),
+      venta: format(rates[`${prefix}_VENTA`]),
+    },
+  }))
 
 const ICON_PROPS = {
   viewBox: '0 0 24 24',
@@ -142,7 +150,7 @@ function App() {
       .then((res) => (res.ok ? res.json() : Promise.reject(res.status)))
       .then((data) => {
         const loaded = {}
-        for (const key of Object.keys(DEFAULT_RATES)) {
+        for (const key of RATE_KEYS) {
           const value = Number(data[key])
           if (Number.isFinite(value) && value > 0) loaded[key] = value
         }
