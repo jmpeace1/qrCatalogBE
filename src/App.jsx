@@ -90,6 +90,7 @@ const DEFAULT_RATES = {
 // from <PREFIX>_COMPRA / <PREFIX>_VENTA in last.json.
 const RATE_OPTIONS = [
   { key: 'bcb', label: 'BCB', prefix: 'BCB' },
+  { key: 'paralelo', label: 'PARALELO', prefix: 'PARALELO' },
   { key: 'binance', label: 'BINANCE', prefix: 'BINANCE' },
   { key: 'bybit', label: 'BYBIT', prefix: 'BYBIT' },
   { key: 'airtm', label: 'AIRTM', prefix: 'AIRTM' },
