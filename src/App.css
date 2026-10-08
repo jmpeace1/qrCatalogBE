@@ -24,7 +24,9 @@
 }
 
 .amount-input {
-  width: 200px;
+  flex: 1;
+  min-width: 0;
+  width: auto;
   padding: 12px 20px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 999px;
@@ -70,6 +72,7 @@
 }
 
 .fields {
+  --quick-w: 96px;
   width: 100%;
   align-items: center;
   display: flex;
@@ -80,11 +83,56 @@
 .field {
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   gap: 6px;
+  width: 100%;
+}
+
+.field-row {
+  display: flex;
+  align-items: stretch;
+  gap: 8px;
+}
+
+.quick-grid,
+.quick-spacer {
+  flex: none;
+  width: var(--quick-w);
+}
+
+.quick-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 4px;
+}
+
+.quick-button {
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.45);
+  border-radius: 999px;
+  color: #fff;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.quick-button.tint-blue {
+  background: rgba(59, 130, 246, 0.8);
+}
+
+.quick-button.tint-green {
+  background: rgba(34, 197, 94, 0.8);
+}
+
+.quick-button:active {
+  filter: brightness(1.25);
 }
 
 .field-label {
+  display: block;
+  padding-right: calc(var(--quick-w) + 8px);
+  text-align: center;
   color: #fff;
   font-size: 0.85rem;
   font-weight: 600;
