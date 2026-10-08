@@ -193,3 +193,12 @@
 .amount-input.tint-green:focus {
   border-color: rgba(134, 239, 172, 1);
 }
+
+.updated-label {
+  margin: -8px 0 0;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.75rem;
+  text-align: center;
+  text-wrap: balance;
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
+}
