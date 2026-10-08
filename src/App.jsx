@@ -160,6 +160,51 @@ function App() {
   const tcTouched = useRef(false)
   const copiedTimer = useRef(null)
   const [copied, setCopied] = useState(false)
+  const [cardFlat, setCardFlat] = useState(false)
+  const cardRef = useRef(null)
+
+  // Card tilts toward the pointer and the glare follows it (mouse/trackpad
+  // only, and never with reduced motion). Written as CSS variables so pointer
+  // moves don't re-render the app.
+  useEffect(() => {
+    const card = cardRef.current
+    if (!card) return
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
+    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)')
+    let frame = 0
+    const reset = () => {
+      cancelAnimationFrame(frame)
+      card.style.removeProperty('--tilt-x')
+      card.style.removeProperty('--tilt-y')
+      card.style.removeProperty('--glare-x')
+      card.style.removeProperty('--glare-y')
+    }
+    const handleMove = (e) => {
+      if (reduceMotion.matches || !finePointer.matches) return
+      cancelAnimationFrame(frame)
+      frame = requestAnimationFrame(() => {
+        const r = card.getBoundingClientRect()
+        const x = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1)
+        const y = Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1)
+        card.style.setProperty('--tilt-x', `${((0.5 - y) * 8).toFixed(2)}deg`)
+        card.style.setProperty('--tilt-y', `${((x - 0.5) * 12).toFixed(2)}deg`)
+        card.style.setProperty('--glare-x', `${(x * 100).toFixed(1)}%`)
+        card.style.setProperty('--glare-y', `${(y * 100).toFixed(1)}%`)
+      })
+    }
+    window.addEventListener('pointermove', handleMove)
+    document.documentElement.addEventListener('pointerleave', reset)
+    return () => {
+      reset()
+      window.removeEventListener('pointermove', handleMove)
+      document.documentElement.removeEventListener('pointerleave', reset)
+    }
+  }, [])
+
+  // Lay the card flat while typing, so the inputs aren't moving
+  const handleCardFocus = (e) =>
+    setCardFlat(e.target instanceof HTMLInputElement)
+  const handleCardBlur = () => setCardFlat(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -311,118 +356,126 @@ function App() {
 
   return (
     <main className="stage">
-      <section className="panel">
-        <div className="pill-slot">
-          <LiquidGlass
-            displacementScale={25}
-            blurAmount={0.08}
-            saturation={140}
-            aberrationIntensity={1}
-            elasticity={0.25}
-            cornerRadius={999}
-            padding="14px 28px"
-            style={{ position: 'absolute', top: '50%', left: '50%' }}
-          >
-            <span className="hello">
-              <svg
-                className="person-icon"
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5z" />
-              </svg>
-              {pillFrom}
-              <svg
-                className="arrow-icon"
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-label="to"
-                role="img"
-              >
-                <path d="M4 12h16M14 6l6 6-6 6" />
-              </svg>
-              {pillTo}
-            </span>
-          </LiquidGlass>
-        </div>
-        {updated && (
-          <p className="updated-label">TCs actualizados en {updated}</p>
-        )}
-        <div className="actions">
-          <button
-            type="button"
-            className="action-button"
-            onClick={() => setOverlayMode('compra')}
-          >
-            {rateMode === 'compra' && (
-              <span className="check" aria-label="selected">
-                ✓
+      <div className={`card-float${cardFlat ? ' is-flat' : ''}`}>
+        <section
+          ref={cardRef}
+          className={`panel${cardFlat ? ' is-flat' : ''}`}
+          onFocus={handleCardFocus}
+          onBlur={handleCardBlur}
+        >
+          <div className="card-glare" aria-hidden="true" />
+          <div className="pill-slot">
+            <LiquidGlass
+              displacementScale={25}
+              blurAmount={0.08}
+              saturation={140}
+              aberrationIntensity={1}
+              elasticity={0.25}
+              cornerRadius={999}
+              padding="14px 28px"
+              style={{ position: 'absolute', top: '50%', left: '50%' }}
+            >
+              <span className="hello">
+                <svg
+                  className="person-icon"
+                  viewBox="0 0 24 24"
+                  width="22"
+                  height="22"
+                  fill="currentColor"
+                  aria-hidden="true"
+                >
+                  <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5z" />
+                </svg>
+                {pillFrom}
+                <svg
+                  className="arrow-icon"
+                  viewBox="0 0 24 24"
+                  width="22"
+                  height="22"
+                  fill="none"
+                  stroke="currentColor"
+                  strokeWidth="2.5"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  aria-label="to"
+                  role="img"
+                >
+                  <path d="M4 12h16M14 6l6 6-6 6" />
+                </svg>
+                {pillTo}
               </span>
-            )}
-            COMPRA USD
-          </button>
-          <button
-            type="button"
-            className="action-button"
-            onClick={() => setOverlayMode('venta')}
-          >
-            {rateMode === 'venta' && (
-              <span className="check" aria-label="selected">
-                ✓
-              </span>
-            )}
-            VENTA USD
-          </button>
-        </div>
-        <div className="fields">
-          <NumberField
-            label={tcLabel}
-            name="tc"
-            value={tc}
-            onChange={handleTcInput}
-          />
-          {rateMode === 'venta' ? (
-            <>
-              {usdField}
-              {bobField}
-            </>
-          ) : (
-            <>
-              {bobField}
-              {usdField}
-            </>
+            </LiquidGlass>
+          </div>
+          {updated && (
+            <p className="updated-label">TCs actualizados en {updated}</p>
           )}
-          <div className="description-row">
-            <p className="description">{descriptionText}</p>
+          <div className="actions">
             <button
               type="button"
-              className="copy-button"
-              aria-label="Copy to clipboard"
-              onClick={handleCopy}
+              className="action-button"
+              onClick={() => setOverlayMode('compra')}
             >
-              {copied ? (
-                <svg {...ICON_PROPS} className="copied-icon">
-                  <path d="M5 12.5l4.5 4.5L19 7.5" />
-                </svg>
-              ) : (
-                <svg {...ICON_PROPS}>
-                  <rect x="9" y="9" width="11" height="11" rx="2" />
-                  <path d="M5 15V6a2 2 0 0 1 2-2h9" />
-                </svg>
+              {rateMode === 'compra' && (
+                <span className="check" aria-label="selected">
+                  ✓
+                </span>
               )}
+              COMPRA USD
+            </button>
+            <button
+              type="button"
+              className="action-button"
+              onClick={() => setOverlayMode('venta')}
+            >
+              {rateMode === 'venta' && (
+                <span className="check" aria-label="selected">
+                  ✓
+                </span>
+              )}
+              VENTA USD
             </button>
           </div>
-        </div>
-      </section>
+          <div className="fields">
+            <NumberField
+              label={tcLabel}
+              name="tc"
+              value={tc}
+              onChange={handleTcInput}
+            />
+            {rateMode === 'venta' ? (
+              <>
+                {usdField}
+                {bobField}
+              </>
+            ) : (
+              <>
+                {bobField}
+                {usdField}
+              </>
+            )}
+            <div className="description-row">
+              <p className="description">{descriptionText}</p>
+              <button
+                type="button"
+                className="copy-button"
+                aria-label="Copy to clipboard"
+                onClick={handleCopy}
+              >
+                {copied ? (
+                  <svg {...ICON_PROPS} className="copied-icon">
+                    <path d="M5 12.5l4.5 4.5L19 7.5" />
+                  </svg>
+                ) : (
+                  <svg {...ICON_PROPS}>
+                    <rect x="9" y="9" width="11" height="11" rx="2" />
+                    <path d="M5 15V6a2 2 0 0 1 2-2h9" />
+                  </svg>
+                )}
+              </button>
+            </div>
+          </div>
+        </section>
+      </div>
       {overlayMode && (
         <div
           className="overlay"
