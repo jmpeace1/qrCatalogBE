@@ -53,78 +53,51 @@
   border-color: rgba(255, 255, 255, 0.8);
 }
 
-/* Holds the 3D perspective and the slow floating motion of the card */
-.card-float {
-  width: min(380px, calc(100% - 32px));
-  margin: 24px 0 72px;
-  perspective: 1200px;
-  animation: card-float 6s ease-in-out infinite;
-}
-
-.card-float.is-flat {
-  animation-play-state: paused;
-}
-
-@keyframes card-float {
-  0%,
-  100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-6px);
-  }
-}
-
 .panel {
-  /* Resting tilt; --tilt-x / --tilt-y are added on pointer move */
-  --base-x: 4deg;
-  --base-y: -10deg;
   box-sizing: border-box;
-  width: 100%;
+  width: min(380px, calc(100% - 32px));
+  margin-top: 24px;
   padding: 24px 20px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.09);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  background: rgba(38, 40, 46, 0.62);
+  backdrop-filter: blur(24px) saturate(130%);
+  -webkit-backdrop-filter: blur(24px) saturate(130%);
+}
+
+/* Shared 3D card look for the main panel and the rate popup: rests flat,
+   edge thickness + floor shadow, and a small tilt toward the pointer
+   (--tilt-x / --tilt-y are set from JS) */
+.card-3d {
   border-radius: 22px;
-  background: linear-gradient(155deg, #18181d 0%, #0b0b0e 55%, #060607 100%);
   /* Stacked hard shadows read as the card's edge, the soft ones as its
      shadow on the floor */
   box-shadow:
-    1px 1px 0 #1f1f25,
-    2px 2px 0 #1b1b20,
-    3px 3px 0 #18181c,
-    4px 4px 0 #151518,
-    5px 5px 0 #121214,
-    6px 6px 0 #0f0f11,
-    14px 18px 24px rgba(0, 0, 0, 0.32),
-    36px 48px 80px rgba(0, 0, 0, 0.45);
-  transform: rotateX(calc(var(--base-x) + var(--tilt-x, 0deg)))
-    rotateY(calc(var(--base-y) + var(--tilt-y, 0deg)));
+    1px 1px 0 rgba(255, 255, 255, 0.07),
+    2px 2px 0 rgba(255, 255, 255, 0.06),
+    3px 3px 0 rgba(255, 255, 255, 0.05),
+    4px 4px 0 rgba(255, 255, 255, 0.04),
+    5px 5px 0 rgba(255, 255, 255, 0.03),
+    14px 18px 24px rgba(0, 0, 0, 0.28),
+    32px 42px 72px rgba(0, 0, 0, 0.38);
+  transform: perspective(1200px) rotateX(var(--tilt-x, 0deg))
+    rotateY(var(--tilt-y, 0deg));
   transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
   isolation: isolate;
   overflow: hidden;
 }
 
-.panel.is-flat {
+.card-3d.is-flat {
   transform: none;
 }
 
-@media (max-width: 480px) {
-  .panel {
-    --base-x: 3deg;
-    --base-y: -6deg;
-  }
-}
-
 @media (prefers-reduced-motion: reduce) {
-  .card-float {
-    animation: none;
-  }
-
-  .panel {
+  .card-3d {
+    transform: none;
     transition: none;
   }
 }
@@ -140,7 +113,7 @@
   background:
     radial-gradient(
       circle at var(--glare-x, 25%) var(--glare-y, 15%),
-      rgba(255, 255, 255, 0.16) 0%,
+      rgba(255, 255, 255, 0.14) 0%,
       transparent 45%
     ),
     linear-gradient(
@@ -151,7 +124,6 @@
       rgba(122, 252, 255, 0.07) 56%,
       transparent 70%
     );
-  transition: background-position 0.3s ease-out;
 }
 
 /* Short iridescent accent line under the top pill */
@@ -327,11 +299,9 @@
   flex-direction: column;
   gap: 16px;
   border: 1px solid rgba(255, 255, 255, 0.14);
-  border-radius: 28px;
   background: rgba(38, 40, 46, 0.9);
   backdrop-filter: blur(24px) saturate(130%);
   -webkit-backdrop-filter: blur(24px) saturate(130%);
-  box-shadow: 0 16px 48px rgba(0, 0, 0, 0.5);
 }
 
 .close-button {
