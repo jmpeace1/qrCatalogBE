@@ -144,45 +144,6 @@ const copyText = async (text) => {
   }
 }
 
-// Small tilt toward the pointer, plus a glare that follows it, on a .card-3d
-// element (mouse/trackpad only, never with reduced motion). Written as CSS
-// variables so pointer moves don't re-render the app.
-function useCardTilt(ref, enabled = true) {
-  useEffect(() => {
-    const card = ref.current
-    if (!enabled || !card) return
-    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)')
-    const finePointer = window.matchMedia('(hover: hover) and (pointer: fine)')
-    let frame = 0
-    const reset = () => {
-      cancelAnimationFrame(frame)
-      for (const name of ['--tilt-x', '--tilt-y', '--glare-x', '--glare-y']) {
-        card.style.removeProperty(name)
-      }
-    }
-    const handleMove = (e) => {
-      if (reduceMotion.matches || !finePointer.matches) return
-      cancelAnimationFrame(frame)
-      frame = requestAnimationFrame(() => {
-        const r = card.getBoundingClientRect()
-        const x = Math.min(Math.max((e.clientX - r.left) / r.width, 0), 1)
-        const y = Math.min(Math.max((e.clientY - r.top) / r.height, 0), 1)
-        card.style.setProperty('--tilt-x', `${((0.5 - y) * 4).toFixed(2)}deg`)
-        card.style.setProperty('--tilt-y', `${((x - 0.5) * 6).toFixed(2)}deg`)
-        card.style.setProperty('--glare-x', `${(x * 100).toFixed(1)}%`)
-        card.style.setProperty('--glare-y', `${(y * 100).toFixed(1)}%`)
-      })
-    }
-    window.addEventListener('pointermove', handleMove)
-    document.documentElement.addEventListener('pointerleave', reset)
-    return () => {
-      reset()
-      window.removeEventListener('pointermove', handleMove)
-      document.documentElement.removeEventListener('pointerleave', reset)
-    }
-  }, [ref, enabled])
-}
-
 function App() {
   const [tc, setTc] = useState('')
   const [bob, setBob] = useState('')
@@ -199,16 +160,6 @@ function App() {
   const tcTouched = useRef(false)
   const copiedTimer = useRef(null)
   const [copied, setCopied] = useState(false)
-  const [cardFlat, setCardFlat] = useState(false)
-  const cardRef = useRef(null)
-  const overlayRef = useRef(null)
-  useCardTilt(cardRef)
-  useCardTilt(overlayRef, Boolean(overlayMode))
-
-  // Lay the card flat while typing, so the inputs aren't moving
-  const handleCardFocus = (e) =>
-    setCardFlat(e.target instanceof HTMLInputElement)
-  const handleCardBlur = () => setCardFlat(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -360,13 +311,7 @@ function App() {
 
   return (
     <main className="stage">
-      <section
-        ref={cardRef}
-        className={`panel card-3d${cardFlat ? ' is-flat' : ''}`}
-        onFocus={handleCardFocus}
-        onBlur={handleCardBlur}
-      >
-        <div className="card-glare" aria-hidden="true" />
+      <section className="panel card-3d">
         <div className="pill-slot">
           <LiquidGlass
             displacementScale={25}
@@ -484,12 +429,10 @@ function App() {
           onClick={(e) => e.target === e.currentTarget && setOverlayMode(null)}
         >
           <section
-            ref={overlayRef}
             className="overlay-panel card-3d"
             role="dialog"
             aria-modal="true"
           >
-            <div className="card-glare" aria-hidden="true" />
             <button
               type="button"
               className="close-button"
