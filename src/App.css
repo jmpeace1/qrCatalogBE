@@ -68,9 +68,8 @@
   -webkit-backdrop-filter: blur(24px) saturate(130%);
 }
 
-/* Shared 3D card look for the main panel and the rate popup: rests flat,
-   edge thickness + floor shadow, and a small tilt toward the pointer
-   (--tilt-x / --tilt-y are set from JS) */
+/* Shared card look for the main panel and the rate popup: edge thickness
+   and a soft floor shadow */
 .card-3d {
   border-radius: 22px;
   /* Stacked hard shadows read as the card's edge, the soft ones as its
@@ -83,47 +82,9 @@
     5px 5px 0 rgba(255, 255, 255, 0.03),
     14px 18px 24px rgba(0, 0, 0, 0.28),
     32px 42px 72px rgba(0, 0, 0, 0.38);
-  transform: perspective(1200px) rotateX(var(--tilt-x, 0deg))
-    rotateY(var(--tilt-y, 0deg));
-  transition: transform 0.45s cubic-bezier(0.2, 0.8, 0.2, 1);
   position: relative;
   isolation: isolate;
   overflow: hidden;
-}
-
-.card-3d.is-flat {
-  transform: none;
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .card-3d {
-    transform: none;
-    transition: none;
-  }
-}
-
-/* Light reflection with a faint iridescent sheen; follows the pointer */
-.card-glare {
-  position: absolute;
-  inset: 0;
-  z-index: 1;
-  pointer-events: none;
-  border-radius: inherit;
-  mix-blend-mode: screen;
-  background:
-    radial-gradient(
-      circle at var(--glare-x, 25%) var(--glare-y, 15%),
-      rgba(255, 255, 255, 0.14) 0%,
-      transparent 45%
-    ),
-    linear-gradient(
-      115deg,
-      transparent 30%,
-      rgba(255, 126, 179, 0.07) 44%,
-      rgba(179, 136, 255, 0.07) 50%,
-      rgba(122, 252, 255, 0.07) 56%,
-      transparent 70%
-    );
 }
 
 /* Short iridescent accent line under the top pill */
