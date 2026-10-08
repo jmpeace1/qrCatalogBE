@@ -81,6 +81,36 @@ const buildRateSources = (rates) => [
   },
 ]
 
+const ICON_PROPS = {
+  viewBox: '0 0 24 24',
+  width: 20,
+  height: 20,
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 2,
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round',
+  'aria-hidden': 'true',
+}
+
+const copyText = async (text) => {
+  try {
+    await navigator.clipboard.writeText(text)
+    return true
+  } catch {
+    // Fallback for browsers/contexts without the async clipboard API
+    const area = document.createElement('textarea')
+    area.value = text
+    area.style.position = 'fixed'
+    area.style.opacity = '0'
+    document.body.appendChild(area)
+    area.select()
+    const ok = document.execCommand('copy')
+    area.remove()
+    return ok
+  }
+}
+
 function App() {
   const [tc, setTc] = useState('')
   const [bob, setBob] = useState('')
@@ -95,6 +125,8 @@ function App() {
   const usdRef = useRef(null)
   const tcChangeRef = useRef(null)
   const tcTouched = useRef(false)
+  const copiedTimer = useRef(null)
+  const [copied, setCopied] = useState(false)
 
   useEffect(() => {
     const controller = new AbortController()
@@ -192,6 +224,19 @@ function App() {
   }
 
   tcChangeRef.current = changeTc
+
+  const descriptionText =
+    rateMode === 'venta'
+      ? `${usd || '0.00'} dólares son Bs. ${bob || '0.00'} a ${tc || '0.00'}`
+      : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares a ${tc || '0.00'}`
+
+  const handleCopy = async () => {
+    if (await copyText(descriptionText)) {
+      setCopied(true)
+      clearTimeout(copiedTimer.current)
+      copiedTimer.current = setTimeout(() => setCopied(false), 1500)
+    }
+  }
 
   const rateSources = buildRateSources(rates)
   const selectedSource = rateSources.find((option) => option.key === rateSource)
@@ -308,11 +353,26 @@ function App() {
               {usdField}
             </>
           )}
-          <p className="description">
-            {rateMode === 'venta'
-              ? `${usd || '0.00'} dólares son Bs. ${bob || '0.00'} a ${tc || '0.00'}`
-              : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares a ${tc || '0.00'}`}
-          </p>
+          <div className="description-row">
+            <p className="description">{descriptionText}</p>
+            <button
+              type="button"
+              className="copy-button"
+              aria-label="Copy to clipboard"
+              onClick={handleCopy}
+            >
+              {copied ? (
+                <svg {...ICON_PROPS} className="copied-icon">
+                  <path d="M5 12.5l4.5 4.5L19 7.5" />
+                </svg>
+              ) : (
+                <svg {...ICON_PROPS}>
+                  <rect x="9" y="9" width="11" height="11" rx="2" />
+                  <path d="M5 15V6a2 2 0 0 1 2-2h9" />
+                </svg>
+              )}
+            </button>
+          </div>
         </div>
       </section>
       {overlayMode && (
