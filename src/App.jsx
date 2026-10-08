@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react'
+import { useEffect, useId, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import LiquidGlass from 'liquid-glass-react'
 import './App.css'
@@ -9,7 +9,10 @@ const format = (n) => (Number.isFinite(n) ? n.toFixed(2) : '')
 
 const selectAll = (e) => e.target.select()
 
-function NumberField({ label, name, value, onChange, tint, inputRef }) {
+const QUICK_VALUES = [1, 10, 100, 1000]
+
+function NumberField({ label, name, value, onChange, tint, inputRef, quick }) {
+  const id = useId()
   const handleChange = (e) => {
     const next = e.target.value
     if (!isValid(next)) return
@@ -26,31 +29,52 @@ function NumberField({ label, name, value, onChange, tint, inputRef }) {
   }
 
   return (
-    <label className="field">
-      <span className="field-label">{label}</span>
-      <input
-        ref={inputRef}
-        className={`amount-input ${tint}`}
-        type="text"
-        inputMode="decimal"
-        enterKeyHint="done"
-        name={`${name}-amount`}
-        autoComplete="off"
-        autoCorrect="off"
-        autoCapitalize="off"
-        spellCheck={false}
-        data-lpignore="true"
-        data-1p-ignore="true"
-        data-form-type="other"
-        placeholder="0.00"
-        value={value}
-        onChange={handleChange}
-        onBlur={handleBlur}
-        onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
-        onFocus={selectAll}
-        onClick={selectAll}
-      />
-    </label>
+    <div className="field">
+      <label className="field-label" htmlFor={id}>
+        {label}
+      </label>
+      <div className="field-row">
+        <input
+          id={id}
+          ref={inputRef}
+          className={`amount-input ${tint}`}
+          type="text"
+          inputMode="decimal"
+          enterKeyHint="done"
+          name={`${name}-amount`}
+          autoComplete="off"
+          autoCorrect="off"
+          autoCapitalize="off"
+          spellCheck={false}
+          data-lpignore="true"
+          data-1p-ignore="true"
+          data-form-type="other"
+          placeholder="0.00"
+          value={value}
+          onChange={handleChange}
+          onBlur={handleBlur}
+          onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
+          onFocus={selectAll}
+          onClick={selectAll}
+        />
+        {quick ? (
+          <div className="quick-grid">
+            {QUICK_VALUES.map((amount) => (
+              <button
+                key={amount}
+                type="button"
+                className={`quick-button ${tint}`}
+                onClick={() => onChange(format(amount))}
+              >
+                {amount}
+              </button>
+            ))}
+          </div>
+        ) : (
+          <div className="quick-spacer" />
+        )}
+      </div>
+    </div>
   )
 }
 
@@ -263,6 +287,7 @@ function App() {
       label="BOB"
       name="bob"
       tint="tint-blue"
+      quick
       inputRef={bobRef}
       value={bob}
       onChange={handleBobChange}
@@ -273,6 +298,7 @@ function App() {
       label="USD"
       name="usd"
       tint="tint-green"
+      quick
       inputRef={usdRef}
       value={usd}
       onChange={handleUsdChange}
