@@ -271,6 +271,9 @@
 .updated-label {
   margin: -8px 0 0;
   color: rgba(255, 255, 255, 0.7);
+  font-family: 'Clarity City', sans-serif;
+  font-optical-sizing: auto;
+  font-style: normal;
   font-size: 0.75rem;
   text-align: center;
   text-wrap: balance;
