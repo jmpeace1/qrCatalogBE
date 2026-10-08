@@ -297,3 +297,13 @@
 .copied-icon {
   color: #3ddc84;
 }
+
+/* Top pill: no glass fill, shadow or blur, only the thin rim stays */
+.pill-slot .glass__warp {
+  backdrop-filter: none !important;
+  filter: none !important;
+}
+
+.pill-slot .glass {
+  box-shadow: none !important;
+}
