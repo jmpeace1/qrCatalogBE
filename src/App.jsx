@@ -2,7 +2,13 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import './App.css'
 
-const isValid = (text) => /^\d*(\.\d{0,2})?$/.test(text)
+// At most 2 decimals and `maxDigits` digits in total
+const isValid = (text, maxDigits) =>
+  /^\d*(\.\d{0,2})?$/.test(text) && text.replace('.', '').length <= maxDigits
+
+// Largest amount that fits the 10-digit BOB / USD fields
+const MAX_AMOUNT = 99999999.99
+const clampAmount = (n) => Math.min(n, MAX_AMOUNT)
 
 const format = (n) => (Number.isFinite(n) ? n.toFixed(2) : '')
 
@@ -55,11 +61,12 @@ function NumberField({
   inputRef,
   controls,
   inline,
+  maxDigits = 10,
 }) {
   const id = useId()
   const handleChange = (e) => {
     const next = e.target.value
-    if (!isValid(next)) return
+    if (!isValid(next, maxDigits)) return
     onChange(next)
     if (/\.\d{2}$/.test(next)) {
       const input = e.target
@@ -349,9 +356,13 @@ function App() {
   }
 
   const bobFromUsd = (usdValue, rate) =>
-    usdValue === '' || !rate ? '' : format(parseFloat(usdValue) * rate)
+    usdValue === '' || !rate
+      ? ''
+      : format(clampAmount(parseFloat(usdValue) * rate))
   const usdFromBob = (bobValue, rate) =>
-    bobValue === '' || !rate ? '' : format(parseFloat(bobValue) / rate)
+    bobValue === '' || !rate
+      ? ''
+      : format(clampAmount(parseFloat(bobValue) / rate))
 
   // Sets BOB or USD as if typed there and recalculates the other one.
   // `track: false` skips recording the field's own previous value (revert).
@@ -382,7 +393,9 @@ function App() {
     onAdjust: (delta) => {
       newSession()
       const current = parseFloat(field === 'bob' ? bob : usd) || 0
-      const next = Math.max(0, Math.round((current + delta) * 100) / 100)
+      const next = clampAmount(
+        Math.max(0, Math.round((current + delta) * 100) / 100),
+      )
       setField(field, format(next))
     },
     onClear: () => {
@@ -544,6 +557,7 @@ function App() {
               label={tcLabel}
               name="tc"
               inline
+              maxDigits={5}
               value={tc}
               onChange={handleTcInput}
             />
