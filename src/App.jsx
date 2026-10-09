@@ -11,7 +11,47 @@ const selectAll = (e) => e.target.select()
 
 const QUICK_VALUES = [1, 10, 100, 1000]
 
-function NumberField({ label, name, value, onChange, tint, inputRef, quick }) {
+const MINI_ICON = {
+  viewBox: '0 0 24 24',
+  width: 14,
+  height: 14,
+  fill: 'none',
+  stroke: 'currentColor',
+  strokeWidth: 2.5,
+  strokeLinecap: 'round',
+  strokeLinejoin: 'round',
+  'aria-hidden': 'true',
+}
+
+function QuickGrid({ tint, disabled, onPick }) {
+  return (
+    <div className="quick-grid">
+      {QUICK_VALUES.map((amount) => (
+        <button
+          key={amount}
+          type="button"
+          className={`quick-button ${tint}`}
+          disabled={disabled}
+          onClick={() => onPick(amount)}
+        >
+          {amount}
+        </button>
+      ))}
+    </div>
+  )
+}
+
+// `controls` (optional) adds the RESTAR / SUMAR button grids, the revert
+// button and the clear (X) button around the input.
+function NumberField({
+  label,
+  name,
+  value,
+  onChange,
+  tint,
+  inputRef,
+  controls,
+}) {
   const id = useId()
   const handleChange = (e) => {
     const next = e.target.value
@@ -28,12 +68,55 @@ function NumberField({ label, name, value, onChange, tint, inputRef, quick }) {
     if (formatted !== value) onChange(formatted)
   }
 
+  const isZero = !parseFloat(value)
+
   return (
     <div className="field">
-      <label className="field-label" htmlFor={id}>
-        {label}
-      </label>
+      <div className="field-head">
+        {controls ? <span className="quick-caption">RESTAR</span> : <span />}
+        <div className="field-title">
+          {controls && (
+            <button
+              type="button"
+              className="mini-button"
+              aria-label={`Revert ${label}`}
+              disabled={!controls.canRevert}
+              onClick={controls.onRevert}
+            >
+              <svg {...MINI_ICON}>
+                <path d="M3 12a9 9 0 1 0 3-6.7" />
+                <path d="M3 4v5h5" />
+              </svg>
+            </button>
+          )}
+          <label className="field-label" htmlFor={id}>
+            {label}
+          </label>
+          {controls && (
+            <button
+              type="button"
+              className="mini-button"
+              aria-label={`Clear ${label}`}
+              onClick={controls.onClear}
+            >
+              <svg {...MINI_ICON}>
+                <path d="M6 6l12 12M18 6L6 18" />
+              </svg>
+            </button>
+          )}
+        </div>
+        {controls ? <span className="quick-caption">SUMAR</span> : <span />}
+      </div>
       <div className="field-row">
+        {controls ? (
+          <QuickGrid
+            tint={tint}
+            disabled={isZero}
+            onPick={(amount) => controls.onAdjust(-amount)}
+          />
+        ) : (
+          <div className="quick-spacer" />
+        )}
         <input
           id={id}
           ref={inputRef}
@@ -57,19 +140,11 @@ function NumberField({ label, name, value, onChange, tint, inputRef, quick }) {
           onFocus={selectAll}
           onClick={selectAll}
         />
-        {quick ? (
-          <div className="quick-grid">
-            {QUICK_VALUES.map((amount) => (
-              <button
-                key={amount}
-                type="button"
-                className={`quick-button ${tint}`}
-                onClick={() => onChange(format(amount))}
-              >
-                {amount}
-              </button>
-            ))}
-          </div>
+        {controls ? (
+          <QuickGrid
+            tint={tint}
+            onPick={(amount) => controls.onAdjust(amount)}
+          />
         ) : (
           <div className="quick-spacer" />
         )}
@@ -154,6 +229,10 @@ function App() {
   const [overlayMode, setOverlayMode] = useState(null)
   const [rateMode, setRateMode] = useState(null)
   const [rateSource, setRateSource] = useState(null)
+  // Per-field undo history: entries are { value, session }. Changes made in
+  // the same session (one focus / one button press) share a single entry.
+  const [history, setHistory] = useState({ bob: [], usd: [] })
+  const sessionRef = useRef(0)
   const bobRef = useRef(null)
   const usdRef = useRef(null)
   const tcChangeRef = useRef(null)
@@ -211,30 +290,105 @@ function App() {
     return () => document.removeEventListener('pointerdown', handlePointerDown)
   }, [])
 
+  const newSession = () => {
+    sessionRef.current += 1
+  }
+
+  // Focus changes start a new undo step
+  useEffect(() => {
+    document.addEventListener('focusin', newSession)
+    document.addEventListener('focusout', newSession)
+    return () => {
+      document.removeEventListener('focusin', newSession)
+      document.removeEventListener('focusout', newSession)
+    }
+  }, [])
+
+  const record = (field, previous) => {
+    const session = sessionRef.current
+    setHistory((h) => {
+      const stack = h[field]
+      if (stack.length && stack[stack.length - 1].session === session) return h
+      return {
+        ...h,
+        [field]: [...stack, { value: previous, session }].slice(-100),
+      }
+    })
+  }
+
   const bobFromUsd = (usdValue, rate) =>
     usdValue === '' || !rate ? '' : format(parseFloat(usdValue) * rate)
   const usdFromBob = (bobValue, rate) =>
     bobValue === '' || !rate ? '' : format(parseFloat(bobValue) / rate)
 
-  const handleBobChange = (value) => {
-    setSource('bob')
-    setBob(value)
-    setUsd(usdFromBob(value, parseFloat(tc)))
+  // Sets BOB or USD as if typed there and recalculates the other one.
+  // `track: false` skips recording the field's own previous value (revert).
+  const setField = (field, value, { track = true } = {}) => {
+    const rate = parseFloat(tc)
+    if (field === 'bob') {
+      const nextUsd = usdFromBob(value, rate)
+      if (track && value !== bob) record('bob', bob)
+      if (nextUsd !== usd) record('usd', usd)
+      setSource('bob')
+      setBob(value)
+      setUsd(nextUsd)
+    } else {
+      const nextBob = bobFromUsd(value, rate)
+      if (track && value !== usd) record('usd', usd)
+      if (nextBob !== bob) record('bob', bob)
+      setSource('usd')
+      setUsd(value)
+      setBob(nextBob)
+    }
   }
 
-  const handleUsdChange = (value) => {
-    setSource('usd')
-    setUsd(value)
-    setBob(bobFromUsd(value, parseFloat(tc)))
-  }
+  const handleBobChange = (value) => setField('bob', value)
+  const handleUsdChange = (value) => setField('usd', value)
+
+  const fieldControls = (field) => ({
+    canRevert: history[field].length > 0,
+    onAdjust: (delta) => {
+      newSession()
+      const current = parseFloat(field === 'bob' ? bob : usd) || 0
+      const next = Math.max(0, Math.round((current + delta) * 100) / 100)
+      setField(field, format(next))
+    },
+    onClear: () => {
+      newSession()
+      setField(field, '0.00')
+    },
+    onRevert: () => {
+      newSession()
+      const current = field === 'bob' ? bob : usd
+      const stack = [...history[field]]
+      // Skip steps that wouldn't change anything
+      while (stack.length && stack[stack.length - 1].value === current) {
+        stack.pop()
+      }
+      if (!stack.length) {
+        setHistory((h) => ({ ...h, [field]: [] }))
+        return
+      }
+      const { value } = stack.pop()
+      setHistory((h) => ({ ...h, [field]: stack }))
+      setField(field, value, { track: false })
+    },
+  })
 
   // Core TC update, also used when a rate option is selected
   const changeTc = (value) => {
     tcTouched.current = true
     setTc(value)
     const rate = parseFloat(value)
-    if (source === 'bob') setUsd(usdFromBob(bob, rate))
-    else setBob(bobFromUsd(usd, rate))
+    if (source === 'bob') {
+      const nextUsd = usdFromBob(bob, rate)
+      if (nextUsd !== usd) record('usd', usd)
+      setUsd(nextUsd)
+    } else {
+      const nextBob = bobFromUsd(usd, rate)
+      if (nextBob !== bob) record('bob', bob)
+      setBob(nextBob)
+    }
   }
 
   // Manual TC edits deselect the COMPRA/VENTA choice
@@ -245,6 +399,7 @@ function App() {
   }
 
   const handleRatePress = (selected) => {
+    newSession()
     const mode = overlayMode
     // Flush so the panel is gone and the fields are reordered before focusing
     flushSync(() => {
@@ -291,7 +446,7 @@ function App() {
       label="BOB"
       name="bob"
       tint="tint-blue"
-      quick
+      controls={fieldControls('bob')}
       inputRef={bobRef}
       value={bob}
       onChange={handleBobChange}
@@ -302,7 +457,7 @@ function App() {
       label="USD"
       name="usd"
       tint="tint-green"
-      quick
+      controls={fieldControls('usd')}
       inputRef={usdRef}
       value={usd}
       onChange={handleUsdChange}
