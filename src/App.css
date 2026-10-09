@@ -16,7 +16,7 @@
   flex: 1;
   min-width: 0;
   width: auto;
-  padding: 9px 6px;
+  padding: 9px 12px 9px 4px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.18);
@@ -84,7 +84,7 @@
 }
 
 .fields {
-  --quick-w: 86px;
+  --quick-w: 84px;
   width: 100%;
   align-items: center;
   display: flex;
