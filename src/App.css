@@ -16,7 +16,7 @@
   flex: 1;
   min-width: 0;
   width: auto;
-  padding: 12px 14px;
+  padding: 8px 14px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.18);
@@ -25,7 +25,7 @@
   color: #fff;
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
-  font-size: 1.1rem;
+  font-size: 1.05rem;
   font-weight: 700;
   text-align: right;
   outline: none;
@@ -40,19 +40,29 @@
   border-color: rgba(255, 255, 255, 0.8);
 }
 
+/* Square card: fixed 1:1 shape, content scales to fit instead of reflowing */
 .panel {
   box-sizing: border-box;
   width: min(380px, calc(100% - 32px));
+  aspect-ratio: 1 / 1;
   margin-top: 24px;
-  padding: 24px 16px 28px;
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 20px;
+  justify-content: center;
   border: 1px solid rgba(255, 255, 255, 0.14);
   background: rgba(38, 40, 46, 0.62);
   backdrop-filter: blur(24px) saturate(130%);
   -webkit-backdrop-filter: blur(24px) saturate(130%);
+}
+
+.panel-inner {
+  zoom: var(--card-zoom, 1);
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding: 10px 16px;
 }
 
 /* Shared card look for the main panel and the rate popup: edge thickness
@@ -80,7 +90,7 @@
   align-items: center;
   display: flex;
   flex-direction: column;
-  gap: 16px;
+  gap: 6px;
 }
 
 .field {
@@ -127,8 +137,8 @@
   flex: none;
   display: grid;
   place-items: center;
-  width: 26px;
-  height: 26px;
+  width: 22px;
+  height: 22px;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
@@ -217,7 +227,7 @@
   font-family: 'Clarity City', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-size: 0.95rem;
+  font-size: 0.85rem;
   text-align: center;
   white-space: normal;
   overflow-wrap: anywhere;
@@ -319,12 +329,12 @@
 }
 
 .updated-label {
-  margin: -8px 0 0;
+  margin: 0;
   color: rgba(255, 255, 255, 0.7);
   font-family: 'Clarity City', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-size: 0.75rem;
+  font-size: 0.7rem;
   text-align: center;
   text-wrap: balance;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
@@ -335,15 +345,14 @@
   align-items: center;
   gap: 10px;
   width: 100%;
-  margin-top: 4px;
 }
 
 .copy-button {
   flex: none;
   display: grid;
   place-items: center;
-  width: 36px;
-  height: 36px;
+  width: 32px;
+  height: 32px;
   padding: 0;
   border: 1px solid rgba(255, 255, 255, 0.35);
   border-radius: 50%;
@@ -358,4 +367,9 @@
 
 .copied-icon {
   color: #3ddc84;
+}
+
+/* Slimmer buttons inside the square card (the rate popup keeps the roomy ones) */
+.panel .action-button {
+  padding-block: 9px;
 }

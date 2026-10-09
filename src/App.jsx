@@ -1,4 +1,4 @@
-import { useEffect, useId, useRef, useState } from 'react'
+import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import './App.css'
 
@@ -9,6 +9,10 @@ const format = (n) => (Number.isFinite(n) ? n.toFixed(2) : '')
 const selectAll = (e) => e.target.select()
 
 const QUICK_VALUES = [1, 10, 100, 1000]
+
+// The card is a square. Its content is laid out for this width and scaled
+// down (never reshaped) when the card is narrower.
+const CARD_DESIGN_SIZE = 350
 
 const MINI_ICON = {
   viewBox: '0 0 24 24',
@@ -232,6 +236,8 @@ function App() {
   // the same session (one focus / one button press) share a single entry.
   const [history, setHistory] = useState({ bob: [], usd: [] })
   const sessionRef = useRef(0)
+  const cardRef = useRef(null)
+  const [cardZoom, setCardZoom] = useState(1)
   const bobRef = useRef(null)
   const usdRef = useRef(null)
   const tcChangeRef = useRef(null)
@@ -287,6 +293,16 @@ function App() {
     }
     document.addEventListener('pointerdown', handlePointerDown)
     return () => document.removeEventListener('pointerdown', handlePointerDown)
+  }, [])
+
+  useLayoutEffect(() => {
+    const card = cardRef.current
+    const update = () =>
+      setCardZoom(Math.min(1, card.clientWidth / CARD_DESIGN_SIZE))
+    update()
+    const observer = new ResizeObserver(update)
+    observer.observe(card)
+    return () => observer.disconnect()
   }, [])
 
   const newSession = () => {
@@ -471,73 +487,79 @@ function App() {
 
   return (
     <main className="stage">
-      <section className="panel card-3d">
-        {updated && (
-          <p className="updated-label">TCs actualizados en {updated}</p>
-        )}
-        <div className="actions">
-          <button
-            type="button"
-            className="action-button"
-            onClick={() => setOverlayMode('compra')}
-          >
-            {rateMode === 'compra' && (
-              <span className="check" aria-label="selected">
-                ✓
-              </span>
-            )}
-            COMPRA USD
-          </button>
-          <button
-            type="button"
-            className="action-button"
-            onClick={() => setOverlayMode('venta')}
-          >
-            {rateMode === 'venta' && (
-              <span className="check" aria-label="selected">
-                ✓
-              </span>
-            )}
-            VENTA USD
-          </button>
-        </div>
-        <div className="fields">
-          <NumberField
-            label={tcLabel}
-            name="tc"
-            value={tc}
-            onChange={handleTcInput}
-          />
-          {rateMode === 'venta' ? (
-            <>
-              {usdField}
-              {bobField}
-            </>
-          ) : (
-            <>
-              {bobField}
-              {usdField}
-            </>
+      <section
+        ref={cardRef}
+        className="panel card-3d"
+        style={{ '--card-zoom': cardZoom }}
+      >
+        <div className="panel-inner">
+          {updated && (
+            <p className="updated-label">TCs actualizados en {updated}</p>
           )}
-          <div className="description-row">
-            <p className="description">{descriptionText}</p>
+          <div className="actions">
             <button
               type="button"
-              className="copy-button"
-              aria-label="Copy to clipboard"
-              onClick={handleCopy}
+              className="action-button"
+              onClick={() => setOverlayMode('compra')}
             >
-              {copied ? (
-                <svg {...ICON_PROPS} className="copied-icon">
-                  <path d="M5 12.5l4.5 4.5L19 7.5" />
-                </svg>
-              ) : (
-                <svg {...ICON_PROPS}>
-                  <rect x="9" y="9" width="11" height="11" rx="2" />
-                  <path d="M5 15V6a2 2 0 0 1 2-2h9" />
-                </svg>
+              {rateMode === 'compra' && (
+                <span className="check" aria-label="selected">
+                  ✓
+                </span>
               )}
+              COMPRA USD
             </button>
+            <button
+              type="button"
+              className="action-button"
+              onClick={() => setOverlayMode('venta')}
+            >
+              {rateMode === 'venta' && (
+                <span className="check" aria-label="selected">
+                  ✓
+                </span>
+              )}
+              VENTA USD
+            </button>
+          </div>
+          <div className="fields">
+            <NumberField
+              label={tcLabel}
+              name="tc"
+              value={tc}
+              onChange={handleTcInput}
+            />
+            {rateMode === 'venta' ? (
+              <>
+                {usdField}
+                {bobField}
+              </>
+            ) : (
+              <>
+                {bobField}
+                {usdField}
+              </>
+            )}
+            <div className="description-row">
+              <p className="description">{descriptionText}</p>
+              <button
+                type="button"
+                className="copy-button"
+                aria-label="Copy to clipboard"
+                onClick={handleCopy}
+              >
+                {copied ? (
+                  <svg {...ICON_PROPS} className="copied-icon">
+                    <path d="M5 12.5l4.5 4.5L19 7.5" />
+                  </svg>
+                ) : (
+                  <svg {...ICON_PROPS}>
+                    <rect x="9" y="9" width="11" height="11" rx="2" />
+                    <path d="M5 15V6a2 2 0 0 1 2-2h9" />
+                  </svg>
+                )}
+              </button>
+            </div>
           </div>
         </div>
       </section>
