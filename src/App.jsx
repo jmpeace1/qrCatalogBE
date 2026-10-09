@@ -478,14 +478,17 @@ function App() {
 
   const rateSources = buildRateSources(rates)
 
-  // COMPRA popup: what the current BOB amount is worth in USD at each option's
-  // rate. Shows 0.00 until the USD field has an amount.
-  const compraUsdFor = (option) => {
-    const rate = parseFloat(option.rates.compra)
-    const bobAmount = parseFloat(bob) || 0
+  // Popup values, 0.00 until the USD field has an amount:
+  // COMPRA: the current BOB amount in USD at each option's COMPRA rate
+  // VENTA: the current USD amount in BOB at each option's VENTA rate
+  const popupValueFor = (option) => {
+    const rate = parseFloat(option.rates[overlayMode])
     if (!(parseFloat(usd) > 0) || !rate) return '0.00'
-    return format(clampAmount(bobAmount / rate))
+    return overlayMode === 'compra'
+      ? format(clampAmount((parseFloat(bob) || 0) / rate))
+      : format(clampAmount(parseFloat(usd) * rate))
   }
+
   const selectedSource = rateSources.find((option) => option.key === rateSource)
   const tcLabel =
     rateMode && selectedSource
@@ -634,11 +637,11 @@ function App() {
                       ✓
                     </span>
                   )}
-                  {option.label} {option.rates[overlayMode]}
+                  {option.label} | {option.rates[overlayMode]}
                 </button>
-                {overlayMode === 'compra' && (
-                  <span className="rate-value">{compraUsdFor(option)}</span>
-                )}
+                <span className={`rate-value ${overlayMode}`}>
+                  {popupValueFor(option)}
+                </span>
               </div>
             ))}
           </section>
