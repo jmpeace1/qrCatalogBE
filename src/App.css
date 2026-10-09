@@ -43,9 +43,8 @@
 /* Square card: fixed 1:1 shape, content scales to fit instead of reflowing */
 .panel {
   box-sizing: border-box;
-  width: min(380px, calc(100% - 32px));
+  width: min(380px, 100%);
   aspect-ratio: 1 / 1;
-  margin-top: 24px;
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -278,8 +277,7 @@
 .overlay-panel {
   position: relative;
   box-sizing: border-box;
-  width: min(380px, calc(100% - 32px));
-  margin-top: 24px;
+  width: min(380px, 100%);
   padding: 56px 20px 28px;
   display: flex;
   flex-direction: column;
@@ -396,4 +394,12 @@
   flex: none;
   box-sizing: border-box;
   width: 92px;
+}
+
+/* On phones the card and the popup run edge to edge, no side gaps */
+@media (max-width: 440px) {
+  .panel,
+  .overlay-panel {
+    width: 100%;
+  }
 }
