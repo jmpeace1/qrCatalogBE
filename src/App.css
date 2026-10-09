@@ -30,7 +30,7 @@
   flex: 1;
   min-width: 0;
   width: auto;
-  padding: 12px 20px;
+  padding: 12px 14px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.18);
@@ -57,7 +57,7 @@
   box-sizing: border-box;
   width: min(380px, calc(100% - 32px));
   margin-top: 24px;
-  padding: 24px 20px 28px;
+  padding: 24px 16px 28px;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -107,7 +107,7 @@
 }
 
 .fields {
-  --quick-w: 96px;
+  --quick-w: clamp(60px, 19vw, 74px);
   width: 100%;
   align-items: center;
   display: flex;
@@ -126,7 +126,57 @@
 .field-row {
   display: flex;
   align-items: stretch;
+  gap: 6px;
+}
+
+.field-head {
+  display: grid;
+  grid-template-columns: var(--quick-w) 1fr var(--quick-w);
+  align-items: end;
+  gap: 6px;
+}
+
+.field-title {
+  display: flex;
+  align-items: center;
+  justify-content: center;
   gap: 8px;
+  min-width: 0;
+}
+
+.quick-caption {
+  color: rgba(255, 255, 255, 0.7);
+  font-family: 'Google Sans Flex', sans-serif;
+  font-size: 0.6rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-align: center;
+  line-height: 1;
+  padding-bottom: 2px;
+}
+
+.mini-button {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 26px;
+  height: 26px;
+  padding: 0;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.14);
+  color: #fff;
+  cursor: pointer;
+}
+
+.mini-button:active:not(:disabled) {
+  background: rgba(255, 255, 255, 0.3);
+}
+
+.mini-button:disabled,
+.quick-button:disabled {
+  opacity: 0.35;
+  cursor: default;
 }
 
 .quick-grid,
@@ -149,7 +199,7 @@
   color: #fff;
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
-  font-size: 0.8rem;
+  font-size: clamp(0.62rem, 2.4vw, 0.8rem);
   font-weight: 600;
   cursor: pointer;
 }
@@ -168,8 +218,8 @@
 
 .field-label {
   display: block;
-  padding-right: calc(var(--quick-w) + 8px);
   text-align: center;
+  white-space: nowrap;
   color: #fff;
   font-family: 'Google Sans Flex', sans-serif;
   font-optical-sizing: auto;
@@ -214,6 +264,7 @@
 
 .action-button {
   flex: 1;
+  min-width: 0;
   padding: 12px 8px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 999px;
@@ -224,7 +275,7 @@
   font-family: 'Clarity City', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-size: 0.95rem;
+  font-size: clamp(0.78rem, 3.4vw, 0.95rem);
   font-weight: 600;
   letter-spacing: 0.04em;
   white-space: nowrap;
