@@ -373,3 +373,23 @@
 .panel .action-button {
   padding-block: 9px;
 }
+
+/* TC: label on the left of the field, input not centered between the grids */
+.field-inline {
+  box-sizing: border-box;
+  flex-direction: row;
+  align-items: center;
+  gap: 8px;
+}
+
+.field-inline .field-label {
+  flex: 0 1 auto;
+  max-width: 58%;
+  text-align: left;
+  white-space: normal;
+  line-height: 1.15;
+}
+
+.field-inline .amount-input {
+  min-width: 70px;
+}
