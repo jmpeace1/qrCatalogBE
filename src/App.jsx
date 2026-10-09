@@ -477,6 +477,15 @@ function App() {
   }
 
   const rateSources = buildRateSources(rates)
+
+  // COMPRA popup: what the current BOB amount is worth in USD at each option's
+  // rate. Shows 0.00 until the USD field has an amount.
+  const compraUsdFor = (option) => {
+    const rate = parseFloat(option.rates.compra)
+    const bobAmount = parseFloat(bob) || 0
+    if (!(parseFloat(usd) > 0) || !rate) return '0.00'
+    return format(clampAmount(bobAmount / rate))
+  }
   const selectedSource = rateSources.find((option) => option.key === rateSource)
   const tcLabel =
     rateMode && selectedSource
@@ -614,19 +623,23 @@ function App() {
               ✕
             </button>
             {rateSources.map((option) => (
-              <button
-                key={option.key}
-                type="button"
-                className="action-button"
-                onClick={() => handleRatePress(option)}
-              >
-                {rateMode === overlayMode && rateSource === option.key && (
-                  <span className="check" aria-label="selected">
-                    ✓
-                  </span>
+              <div key={option.key} className="rate-row">
+                <button
+                  type="button"
+                  className="action-button"
+                  onClick={() => handleRatePress(option)}
+                >
+                  {rateMode === overlayMode && rateSource === option.key && (
+                    <span className="check" aria-label="selected">
+                      ✓
+                    </span>
+                  )}
+                  {option.label} {option.rates[overlayMode]}
+                </button>
+                {overlayMode === 'compra' && (
+                  <span className="rate-value">{compraUsdFor(option)}</span>
                 )}
-                {option.label} {option.rates[overlayMode]}
-              </button>
+              </div>
             ))}
           </section>
         </div>
