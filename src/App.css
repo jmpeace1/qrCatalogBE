@@ -16,7 +16,7 @@
   flex: 1;
   min-width: 0;
   width: auto;
-  padding: 8px 14px;
+  padding: 9px 6px;
   border: 1px solid rgba(255, 255, 255, 0.45);
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.18);
@@ -25,7 +25,7 @@
   color: #fff;
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
-  font-size: 1.05rem;
+  font-size: 1.3rem;
   font-weight: 700;
   text-align: right;
   outline: none;
@@ -85,7 +85,7 @@
 }
 
 .fields {
-  --quick-w: clamp(60px, 19vw, 74px);
+  --quick-w: 86px;
   width: 100%;
   align-items: center;
   display: flex;
@@ -177,7 +177,7 @@
   color: #fff;
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
-  font-size: clamp(0.62rem, 2.4vw, 0.8rem);
+  font-size: 0.85rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -379,6 +379,7 @@
   box-sizing: border-box;
   flex-direction: row;
   align-items: center;
+  justify-content: space-between;
   gap: 8px;
 }
 
@@ -391,5 +392,8 @@
 }
 
 .field-inline .amount-input {
-  min-width: 70px;
+  /* TC holds at most 5 digits */
+  flex: none;
+  box-sizing: border-box;
+  width: 92px;
 }
