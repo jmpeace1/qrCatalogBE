@@ -1,6 +1,5 @@
 import { useEffect, useId, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
-import LiquidGlass from 'liquid-glass-react'
 import './App.css'
 
 const isValid = (text) => /^\d*(\.\d{0,2})?$/.test(text)
@@ -438,8 +437,14 @@ function App() {
       ? `TC ${selectedSource.label} ${rateMode === 'compra' ? 'Compra' : 'Venta'}`
       : 'TC'
 
-  const [pillFrom, pillTo] =
+  const [fromCurrency, toCurrency] =
     rateMode === 'venta' ? ['USD', 'BOB'] : ['BOB', 'USD']
+  const pageTitle = `${fromCurrency} → ${toCurrency}`
+
+  // The BOB → USD / USD → BOB label is the page title
+  useEffect(() => {
+    document.title = pageTitle
+  }, [pageTitle])
 
   const bobField = (
     <NumberField
@@ -467,48 +472,6 @@ function App() {
   return (
     <main className="stage">
       <section className="panel card-3d">
-        <div className="pill-slot">
-          <LiquidGlass
-            displacementScale={25}
-            blurAmount={0.08}
-            saturation={140}
-            aberrationIntensity={1}
-            elasticity={0.25}
-            cornerRadius={999}
-            padding="14px 28px"
-            style={{ position: 'absolute', top: '50%', left: '50%' }}
-          >
-            <span className="hello">
-              <svg
-                className="person-icon"
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                fill="currentColor"
-                aria-hidden="true"
-              >
-                <path d="M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10zm0 2c-4.42 0-8 2.24-8 5v3h16v-3c0-2.76-3.58-5-8-5z" />
-              </svg>
-              {pillFrom}
-              <svg
-                className="arrow-icon"
-                viewBox="0 0 24 24"
-                width="22"
-                height="22"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2.5"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                aria-label="to"
-                role="img"
-              >
-                <path d="M4 12h16M14 6l6 6-6 6" />
-              </svg>
-              {pillTo}
-            </span>
-          </LiquidGlass>
-        </div>
         {updated && (
           <p className="updated-label">TCs actualizados en {updated}</p>
         )}
