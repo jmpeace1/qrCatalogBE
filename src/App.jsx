@@ -54,6 +54,7 @@ function NumberField({
   tint,
   inputRef,
   controls,
+  inline,
 }) {
   const id = useId()
   const handleChange = (e) => {
@@ -72,6 +73,44 @@ function NumberField({
   }
 
   const isZero = !parseFloat(value)
+
+  const input = (
+    <input
+      id={id}
+      ref={inputRef}
+      className={`amount-input ${tint ?? ''}`}
+      type="text"
+      inputMode="decimal"
+      enterKeyHint="done"
+      name={`${name}-amount`}
+      autoComplete="off"
+      autoCorrect="off"
+      autoCapitalize="off"
+      spellCheck={false}
+      data-lpignore="true"
+      data-1p-ignore="true"
+      data-form-type="other"
+      placeholder="0.00"
+      value={value}
+      onChange={handleChange}
+      onBlur={handleBlur}
+      onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
+      onFocus={selectAll}
+      onClick={selectAll}
+    />
+  )
+
+  // Label to the left of the input, no side controls (used for TC)
+  if (inline) {
+    return (
+      <div className="field field-inline">
+        <label className="field-label" htmlFor={id}>
+          {label}
+        </label>
+        {input}
+      </div>
+    )
+  }
 
   return (
     <div className="field">
@@ -120,29 +159,7 @@ function NumberField({
         ) : (
           <div className="quick-spacer" />
         )}
-        <input
-          id={id}
-          ref={inputRef}
-          className={`amount-input ${tint}`}
-          type="text"
-          inputMode="decimal"
-          enterKeyHint="done"
-          name={`${name}-amount`}
-          autoComplete="off"
-          autoCorrect="off"
-          autoCapitalize="off"
-          spellCheck={false}
-          data-lpignore="true"
-          data-1p-ignore="true"
-          data-form-type="other"
-          placeholder="0.00"
-          value={value}
-          onChange={handleChange}
-          onBlur={handleBlur}
-          onKeyDown={(e) => e.key === 'Enter' && e.target.blur()}
-          onFocus={selectAll}
-          onClick={selectAll}
-        />
+        {input}
         {controls ? (
           <QuickGrid
             tint={tint}
@@ -526,6 +543,7 @@ function App() {
             <NumberField
               label={tcLabel}
               name="tc"
+              inline
               value={tc}
               onChange={handleTcInput}
             />
