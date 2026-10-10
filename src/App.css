@@ -314,6 +314,14 @@
   background: rgba(34, 197, 94, 0.28);
 }
 
+.amount-input.tint-wine {
+  background: rgba(128, 28, 54, 0.5);
+}
+
+.amount-input.tint-wine:focus {
+  background: rgba(128, 28, 54, 0.68);
+}
+
 .amount-input.tint-blue:focus {
   background: rgba(59, 130, 246, 0.42);
 }
