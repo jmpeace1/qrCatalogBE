@@ -2,15 +2,21 @@ import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import './App.css'
 
-// At most 2 decimals and `maxDigits` digits in total
-const isValid = (text, maxDigits) =>
-  /^\d*(\.\d{0,2})?$/.test(text) && text.replace('.', '').length <= maxDigits
+// At most `decimals` decimals and `maxDigits` digits in total
+const isValid = (text, maxDigits, decimals = 2) =>
+  new RegExp(`^\\d*(\\.\\d{0,${decimals}})?$`).test(text) &&
+  text.replace('.', '').length <= maxDigits
 
 // Largest amount that fits the 10-digit BOB / USD fields
 const MAX_AMOUNT = 99999999.99
 const clampAmount = (n) => Math.min(n, MAX_AMOUNT)
 
-const format = (n) => (Number.isFinite(n) ? n.toFixed(2) : '')
+const format = (n, decimals = 2) =>
+  Number.isFinite(n) ? n.toFixed(decimals) : ''
+
+// The TC field shows 3 decimals
+const TC_DECIMALS = 3
+const formatTc = (value) => format(parseFloat(value), TC_DECIMALS)
 
 const selectAll = (e) => e.target.select()
 
@@ -62,20 +68,21 @@ function NumberField({
   controls,
   inline,
   maxDigits = 10,
+  decimals = 2,
 }) {
   const id = useId()
   const handleChange = (e) => {
     const next = e.target.value
-    if (!isValid(next, maxDigits)) return
+    if (!isValid(next, maxDigits, decimals)) return
     onChange(next)
-    if (/\.\d{2}$/.test(next)) {
+    if (new RegExp(`\\.\\d{${decimals}}$`).test(next)) {
       const input = e.target
       setTimeout(() => input.blur(), 0)
     }
   }
 
   const handleBlur = () => {
-    const formatted = format(parseFloat(value))
+    const formatted = format(parseFloat(value), decimals)
     if (formatted !== value) onChange(formatted)
   }
 
@@ -276,7 +283,7 @@ function App() {
     const applyStartupTc = (rate) => {
       if (applied || tcTouched.current) return
       applied = true
-      tcChangeRef.current(format(rate))
+      tcChangeRef.current(formatTc(rate))
       tcTouched.current = false
       setRateMode('compra')
       setRateSource('bcb')
@@ -450,7 +457,7 @@ function App() {
     flushSync(() => {
       setRateMode(mode)
       setRateSource(selected.key)
-      changeTc(selected.rates[mode])
+      changeTc(formatTc(selected.rates[mode]))
       setOverlayMode(null)
     })
     const input = (mode === 'compra' ? bobRef : usdRef).current
@@ -570,6 +577,8 @@ function App() {
               name="tc"
               inline
               maxDigits={5}
+              decimals={TC_DECIMALS}
+              tint="tint-wine"
               value={tc}
               onChange={handleTcInput}
             />
