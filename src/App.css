@@ -280,7 +280,7 @@
   width: min(80vw, 380px);
   height: 80vh;
   height: 80dvh;
-  padding: 56px 14px 20px;
+  padding: 56px 10px 20px;
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
@@ -462,4 +462,67 @@
 .mini-button.mode-button {
   width: 20px;
   height: 20px;
+}
+
+/* Rate option button: [logo] NAME ............ TC (logo as tall as the button) */
+.rate-button {
+  --rate-button-h: 40px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: var(--rate-button-h);
+  padding: 0 10px 0 0;
+  font-size: clamp(0.72rem, 3.3vw, 0.85rem);
+  text-align: left;
+  letter-spacing: 0;
+  overflow: hidden;
+}
+
+.rate-logo {
+  position: relative;
+  display: grid;
+  place-items: center;
+}
+
+.rate-logo .check {
+  margin: 0;
+}
+
+/* With a logo, the check becomes a small badge on its corner */
+.rate-logo img + .check {
+  position: absolute;
+  right: -2px;
+  bottom: -2px;
+  display: grid;
+  place-items: center;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #1b1f3b;
+  font-size: 0.7rem;
+}
+
+.rate-logo {
+  flex: none;
+  width: var(--rate-button-h);
+  height: var(--rate-button-h);
+}
+
+.rate-logo img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+}
+
+.rate-name {
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.rate-tc {
+  flex: none;
+  margin-left: auto;
 }
