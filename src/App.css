@@ -311,7 +311,8 @@
 .close-button {
   position: absolute;
   top: 12px;
-  right: 12px;
+  /* Same right inset as the option rows */
+  right: 10px;
   width: 36px;
   height: 36px;
   border: none;
@@ -529,9 +530,12 @@
 
 .rate-logo img {
   display: block;
+  box-sizing: border-box;
   width: 100%;
   height: 100%;
+  border: 2px solid #fff;
   border-radius: 50%;
+  object-fit: cover;
 }
 
 .rate-name {
