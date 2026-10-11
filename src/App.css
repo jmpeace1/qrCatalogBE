@@ -231,9 +231,7 @@
   /* Always reserve two lines so the layout doesn't jump when the text wraps */
   min-height: calc(2 * 1.4em);
   line-height: 1.4;
-  display: flex;
-  align-items: center;
-  justify-content: flex-start;
+  display: block;
   color: #fff;
   font-family: 'Clarity City', sans-serif;
   font-optical-sizing: auto;
