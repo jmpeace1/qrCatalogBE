@@ -16,8 +16,8 @@
   flex: 1;
   min-width: 0;
   width: auto;
-  /* 50% taller than before: 64px with the larger font */
-  height: 64px;
+  /* vertical whitespace halved: 9px above/below the 28px text */
+  height: 46px;
   box-sizing: border-box;
   padding: 0 12px 0 4px;
   border: none;
