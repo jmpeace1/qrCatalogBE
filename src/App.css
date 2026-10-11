@@ -16,7 +16,10 @@
   flex: 1;
   min-width: 0;
   width: auto;
-  padding: 9px 12px 9px 4px;
+  /* 50% taller than before: 64px with the larger font */
+  height: 64px;
+  box-sizing: border-box;
+  padding: 0 12px 0 4px;
   border: none;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.18);
@@ -25,7 +28,7 @@
   color: #fff;
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
-  font-size: 1.3rem;
+  font-size: 1.75rem;
   font-weight: 700;
   text-align: right;
   outline: none;
@@ -175,7 +178,7 @@
   color: #fff;
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -336,11 +339,12 @@
 
 .updated-label {
   margin: 0;
-  color: rgba(255, 255, 255, 0.7);
+  /* Same type as the copyable text at the bottom */
+  color: #fff;
   font-family: 'Clarity City', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-size: 0.7rem;
+  font-size: 0.85rem;
   text-align: center;
   text-wrap: balance;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
@@ -385,14 +389,14 @@
   box-sizing: border-box;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: flex-end;
   gap: 8px;
 }
 
 .field-inline .field-label {
   flex: 0 1 auto;
   max-width: 58%;
-  text-align: left;
+  text-align: right;
   white-space: normal;
   line-height: 1.15;
 }
@@ -401,7 +405,7 @@
   /* TC holds at most 5 digits */
   flex: none;
   box-sizing: border-box;
-  width: 92px;
+  width: 120px;
 }
 
 /* On phones the card runs edge to edge, no side gaps */
