@@ -172,14 +172,15 @@
 }
 
 .quick-button {
-  padding: 0;
+  padding: 0 7px 0 2px;
   border: none;
   border-radius: 999px;
   color: #fff;
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
+  text-align: right;
   cursor: pointer;
 }
 
@@ -228,7 +229,7 @@
   font-family: 'Clarity City', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-size: 0.85rem;
+  font-size: 1.02rem;
   text-align: center;
   white-space: normal;
   overflow-wrap: anywhere;
@@ -279,8 +280,8 @@
 .overlay-panel {
   position: relative;
   box-sizing: border-box;
-  /* 80% of the screen in both directions (capped on wide screens) */
-  width: min(80vw, 380px);
+  /* Full available width (capped on wide screens), 80% of the height */
+  width: min(100%, 440px);
   height: 80vh;
   height: 80dvh;
   padding: 56px 10px 20px;
@@ -344,7 +345,7 @@
   font-family: 'Clarity City', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
-  font-size: 0.85rem;
+  font-size: 1.02rem;
   text-align: center;
   text-wrap: balance;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
@@ -529,4 +530,8 @@
 .rate-tc {
   flex: none;
   margin-left: auto;
+  font-family: 'Inconsolata', monospace;
+  font-optical-sizing: auto;
+  font-size: 1.3rem;
+  font-weight: 700;
 }
