@@ -537,12 +537,6 @@ function App() {
       : format(clampAmount(parseFloat(usd) * rate))
   }
 
-  const selectedSource = rateSources.find((option) => option.key === rateSource)
-  const tcLabel =
-    rateMode && selectedSource
-      ? `TC ${selectedSource.label} ${rateMode === 'compra' ? 'Compra' : 'Venta'}`
-      : 'TC'
-
   const [fromCurrency, toCurrency] =
     rateMode === 'venta' ? ['USD', 'BOB'] : ['BOB', 'USD']
   const pageTitle = `${fromCurrency} → ${toCurrency}`
@@ -620,7 +614,7 @@ function App() {
           </div>
           <div className="fields">
             <NumberField
-              label={tcLabel}
+              label="TC"
               name="tc"
               inline
               maxDigits={5}
