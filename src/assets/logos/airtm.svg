@@ -1,0 +1,7 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 900">
+  <defs>
+    <clipPath id="above-base"><rect width="900" height="625"/></clipPath>
+  </defs>
+  <circle cx="450" cy="450" r="428" fill="#000"/>
+  <path d="M603 640 L433 296 L300 592 L618 418" fill="none" stroke="#f7f7f7" stroke-width="68" stroke-linejoin="round" stroke-linecap="butt" clip-path="url(#above-base)"/>
+</svg>
