@@ -38,7 +38,8 @@ const MINI_ICON = {
   'aria-hidden': 'true',
 }
 
-function QuickGrid({ tint, disabled, onPick }) {
+// `subtract` switches the grid from +1 … +1000 to -1 … -1000
+function QuickGrid({ tint, subtract, disabled, onPick }) {
   return (
     <div className="quick-grid">
       {QUICK_VALUES.map((amount) => (
@@ -47,8 +48,9 @@ function QuickGrid({ tint, disabled, onPick }) {
           type="button"
           className={`quick-button ${tint}`}
           disabled={disabled}
-          onClick={() => onPick(amount)}
+          onClick={() => onPick(subtract ? -amount : amount)}
         >
+          {subtract ? '-' : '+'}
           {amount}
         </button>
       ))}
@@ -56,8 +58,8 @@ function QuickGrid({ tint, disabled, onPick }) {
   )
 }
 
-// `controls` (optional) adds the RESTAR / SUMAR button grids, the revert
-// button and the clear (X) button around the input.
+// `controls` (optional) adds the SUMAR / RESTAR button grid (with its mode
+// switch), the revert button and the clear (X) button around the input.
 function NumberField({
   label,
   name,
@@ -87,6 +89,7 @@ function NumberField({
   }
 
   const isZero = !parseFloat(value)
+  const [subtract, setSubtract] = useState(false)
 
   const input = (
     <input
@@ -129,7 +132,6 @@ function NumberField({
   return (
     <div className="field">
       <div className="field-head">
-        {controls ? <span className="quick-caption">RESTAR</span> : <span />}
         <div className="field-title">
           {controls && (
             <button
@@ -161,23 +163,46 @@ function NumberField({
             </button>
           )}
         </div>
-        {controls ? <span className="quick-caption">SUMAR</span> : <span />}
+        {controls ? (
+          <div className="quick-mode">
+            <button
+              type="button"
+              className="mini-button mode-button"
+              aria-label={`Restar ${label}`}
+              disabled={subtract}
+              onClick={() => setSubtract(true)}
+            >
+              <svg {...MINI_ICON}>
+                <path d="M6 12h12" />
+              </svg>
+            </button>
+            <span className="quick-caption">
+              {subtract ? 'RESTAR' : 'SUMAR'}
+            </span>
+            <button
+              type="button"
+              className="mini-button mode-button"
+              aria-label={`Sumar ${label}`}
+              disabled={!subtract}
+              onClick={() => setSubtract(false)}
+            >
+              <svg {...MINI_ICON}>
+                <path d="M12 6v12M6 12h12" />
+              </svg>
+            </button>
+          </div>
+        ) : (
+          <span />
+        )}
       </div>
       <div className="field-row">
-        {controls ? (
-          <QuickGrid
-            tint={tint}
-            disabled={isZero}
-            onPick={(amount) => controls.onAdjust(-amount)}
-          />
-        ) : (
-          <div className="quick-spacer" />
-        )}
         {input}
         {controls ? (
           <QuickGrid
             tint={tint}
-            onPick={(amount) => controls.onAdjust(amount)}
+            subtract={subtract}
+            disabled={subtract && isZero}
+            onPick={controls.onAdjust}
           />
         ) : (
           <div className="quick-spacer" />
@@ -513,6 +538,7 @@ function App() {
 
   const bobField = (
     <NumberField
+      key="bob"
       label="BOB"
       name="bob"
       tint="tint-blue"
@@ -524,6 +550,7 @@ function App() {
   )
   const usdField = (
     <NumberField
+      key="usd"
       label="USD"
       name="usd"
       tint="tint-green"
@@ -582,17 +609,8 @@ function App() {
               value={tc}
               onChange={handleTcInput}
             />
-            {rateMode === 'venta' ? (
-              <>
-                {usdField}
-                {bobField}
-              </>
-            ) : (
-              <>
-                {bobField}
-                {usdField}
-              </>
-            )}
+            {/* Keyed array so each field keeps its state when they swap places */}
+            {rateMode === 'venta' ? [usdField, bobField] : [bobField, usdField]}
             <div className="description-row">
               <p className="description">{descriptionText}</p>
               <button

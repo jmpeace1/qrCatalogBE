@@ -83,7 +83,7 @@
 }
 
 .fields {
-  --quick-w: 84px;
+  --quick-w: 96px;
   width: 100%;
   align-items: center;
   display: flex;
@@ -107,7 +107,7 @@
 
 .field-head {
   display: grid;
-  grid-template-columns: var(--quick-w) 1fr var(--quick-w);
+  grid-template-columns: 1fr var(--quick-w);
   align-items: end;
   gap: 6px;
 }
@@ -445,4 +445,21 @@
 
 .rate-value.venta {
   color: #60a5fa;
+}
+
+/* [-] SUMAR [+] above the quick grid */
+.quick-mode {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2px;
+}
+
+.quick-mode .quick-caption {
+  padding-bottom: 0;
+}
+
+.mini-button.mode-button {
+  width: 20px;
+  height: 20px;
 }
