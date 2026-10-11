@@ -27,7 +27,7 @@ const QUICK_VALUES = [1, 10, 100, 1000]
 
 // The card is a square. Its content is laid out for this width and scaled
 // down (never reshaped) when the card is narrower.
-const CARD_DESIGN_SIZE = 412
+const CARD_DESIGN_SIZE = 426
 
 const MINI_ICON = {
   viewBox: '0 0 24 24',
