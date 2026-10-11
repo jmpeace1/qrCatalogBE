@@ -16,7 +16,10 @@
   flex: 1;
   min-width: 0;
   width: auto;
-  padding: 9px 12px 9px 4px;
+  /* 50% taller than before: 64px with the larger font */
+  height: 64px;
+  box-sizing: border-box;
+  padding: 0 12px 0 4px;
   border: none;
   border-radius: 999px;
   background: rgba(255, 255, 255, 0.18);
@@ -25,7 +28,7 @@
   color: #fff;
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
-  font-size: 1.3rem;
+  font-size: 1.75rem;
   font-weight: 700;
   text-align: right;
   outline: none;
@@ -175,7 +178,7 @@
   color: #fff;
   font-family: 'Inconsolata', monospace;
   font-optical-sizing: auto;
-  font-size: 0.85rem;
+  font-size: 1rem;
   font-weight: 600;
   cursor: pointer;
 }
@@ -401,7 +404,7 @@
   /* TC holds at most 5 digits */
   flex: none;
   box-sizing: border-box;
-  width: 92px;
+  width: 120px;
 }
 
 /* On phones the card runs edge to edge, no side gaps */
