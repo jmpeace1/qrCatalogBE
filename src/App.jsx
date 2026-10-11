@@ -3,6 +3,7 @@ import { flushSync } from 'react-dom'
 import './App.css'
 import airtmLogo from './assets/logos/airtm.svg'
 import binanceLogo from './assets/logos/binance.png'
+import bcbLogo from './assets/logos/bcb.png'
 import bybitLogo from './assets/logos/bybit.png'
 
 // At most `decimals` decimals and `maxDigits` digits in total
@@ -227,7 +228,7 @@ const DEFAULT_RATES = {
 // Options shown in the COMPRA USD / VENTA USD panel, in order. Values come
 // from <PREFIX>_COMPRA / <PREFIX>_VENTA in last.json.
 const RATE_OPTIONS = [
-  { key: 'bcb', label: 'BCB', prefix: 'BCB' },
+  { key: 'bcb', label: 'BCB', prefix: 'BCB', logo: bcbLogo },
   { key: 'paralelo', label: 'PARALELO', prefix: 'PARALELO' },
   { key: 'binance', label: 'BINANCE', prefix: 'BINANCE', logo: binanceLogo },
   { key: 'bybit', label: 'BYBIT', prefix: 'BYBIT', logo: bybitLogo },
