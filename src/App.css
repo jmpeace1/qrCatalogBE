@@ -233,13 +233,13 @@
   line-height: 1.4;
   display: flex;
   align-items: center;
-  justify-content: center;
+  justify-content: flex-start;
   color: #fff;
   font-family: 'Clarity City', sans-serif;
   font-optical-sizing: auto;
   font-style: normal;
   font-size: 1.02rem;
-  text-align: center;
+  text-align: left;
   white-space: normal;
   overflow-wrap: anywhere;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
@@ -360,8 +360,8 @@
   font-optical-sizing: auto;
   font-style: normal;
   font-size: 1.02rem;
-  text-align: center;
-  text-wrap: balance;
+  align-self: stretch;
+  text-align: left;
   text-shadow: 0 1px 6px rgba(0, 0, 0, 0.25);
 }
 
