@@ -1,6 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import './App.css'
+import bybitLogo from './assets/logos/bybit.png'
 
 // At most `decimals` decimals and `maxDigits` digits in total
 const isValid = (text, maxDigits, decimals = 2) =>
@@ -71,6 +72,8 @@ function NumberField({
   inline,
   maxDigits = 10,
   decimals = 2,
+  subtract = false,
+  onSubtractChange,
 }) {
   const id = useId()
   const handleChange = (e) => {
@@ -89,7 +92,6 @@ function NumberField({
   }
 
   const isZero = !parseFloat(value)
-  const [subtract, setSubtract] = useState(false)
 
   const input = (
     <input
@@ -170,7 +172,7 @@ function NumberField({
               className="mini-button mode-button"
               aria-label={`Restar ${label}`}
               disabled={subtract}
-              onClick={() => setSubtract(true)}
+              onClick={() => onSubtractChange(true)}
             >
               <svg {...MINI_ICON}>
                 <path d="M6 12h12" />
@@ -184,7 +186,7 @@ function NumberField({
               className="mini-button mode-button"
               aria-label={`Sumar ${label}`}
               disabled={!subtract}
-              onClick={() => setSubtract(false)}
+              onClick={() => onSubtractChange(false)}
             >
               <svg {...MINI_ICON}>
                 <path d="M12 6v12M6 12h12" />
@@ -226,7 +228,7 @@ const RATE_OPTIONS = [
   { key: 'bcb', label: 'BCB', prefix: 'BCB' },
   { key: 'paralelo', label: 'PARALELO', prefix: 'PARALELO' },
   { key: 'binance', label: 'BINANCE', prefix: 'BINANCE' },
-  { key: 'bybit', label: 'BYBIT', prefix: 'BYBIT' },
+  { key: 'bybit', label: 'BYBIT', prefix: 'BYBIT', logo: bybitLogo },
   { key: 'airtm', label: 'AIRTM', prefix: 'AIRTM' },
 ]
 
@@ -239,9 +241,10 @@ const RATE_KEYS = RATE_OPTIONS.flatMap(({ prefix }) => [
 const buildRateSources = (rates) =>
   RATE_OPTIONS.filter(
     ({ prefix }) => rates[`${prefix}_COMPRA`] && rates[`${prefix}_VENTA`],
-  ).map(({ key, label, prefix }) => ({
+  ).map(({ key, label, prefix, logo }) => ({
     key,
     label,
+    logo,
     rates: {
       compra: format(rates[`${prefix}_COMPRA`]),
       venta: format(rates[`${prefix}_VENTA`]),
@@ -300,6 +303,8 @@ function App() {
   const tcTouched = useRef(false)
   const copiedTimer = useRef(null)
   const [copied, setCopied] = useState(false)
+  // SUMAR (false) / RESTAR (true) mode of each field's quick grid
+  const [subtractMode, setSubtractMode] = useState({ bob: false, usd: false })
 
   useEffect(() => {
     const controller = new AbortController()
@@ -432,6 +437,8 @@ function App() {
     },
     onClear: () => {
       newSession()
+      // Clearing either field puts both grids back in SUMAR mode
+      setSubtractMode({ bob: false, usd: false })
       setField(field, '0.00')
     },
     onRevert: () => {
@@ -543,6 +550,8 @@ function App() {
       name="bob"
       tint="tint-blue"
       controls={fieldControls('bob')}
+      subtract={subtractMode.bob}
+      onSubtractChange={(on) => setSubtractMode((m) => ({ ...m, bob: on }))}
       inputRef={bobRef}
       value={bob}
       onChange={handleBobChange}
@@ -555,6 +564,8 @@ function App() {
       name="usd"
       tint="tint-green"
       controls={fieldControls('usd')}
+      subtract={subtractMode.usd}
+      onSubtractChange={(on) => setSubtractMode((m) => ({ ...m, usd: on }))}
       inputRef={usdRef}
       value={usd}
       onChange={handleUsdChange}
@@ -656,15 +667,21 @@ function App() {
               <div key={option.key} className="rate-row">
                 <button
                   type="button"
-                  className="action-button"
+                  className="action-button rate-button"
                   onClick={() => handleRatePress(option)}
                 >
-                  {rateMode === overlayMode && rateSource === option.key && (
-                    <span className="check" aria-label="selected">
-                      ✓
-                    </span>
-                  )}
-                  {option.label} | {option.rates[overlayMode]}
+                  {/* Logo slot is kept even without a logo so names line up;
+                      the selected check sits in it so names are never pushed */}
+                  <span className="rate-logo">
+                    {option.logo && <img src={option.logo} alt="" />}
+                    {rateMode === overlayMode && rateSource === option.key && (
+                      <span className="check" aria-label="selected">
+                        ✓
+                      </span>
+                    )}
+                  </span>
+                  <span className="rate-name">{option.label}</span>
+                  <span className="rate-tc">{option.rates[overlayMode]}</span>
                 </button>
                 <span className={`rate-value ${overlayMode}`}>
                   {popupValueFor(option)}
