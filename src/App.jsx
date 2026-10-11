@@ -1,6 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import './App.css'
+import airtmLogo from './assets/logos/airtm.svg'
 import binanceLogo from './assets/logos/binance.png'
 import bybitLogo from './assets/logos/bybit.png'
 
@@ -230,7 +231,7 @@ const RATE_OPTIONS = [
   { key: 'paralelo', label: 'PARALELO', prefix: 'PARALELO' },
   { key: 'binance', label: 'BINANCE', prefix: 'BINANCE', logo: binanceLogo },
   { key: 'bybit', label: 'BYBIT', prefix: 'BYBIT', logo: bybitLogo },
-  { key: 'airtm', label: 'AIRTM', prefix: 'AIRTM' },
+  { key: 'airtm', label: 'AIRTM', prefix: 'AIRTM', logo: airtmLogo },
 ]
 
 const RATE_KEYS = RATE_OPTIONS.flatMap(({ prefix }) => [
