@@ -1,6 +1,7 @@
 import { useEffect, useId, useLayoutEffect, useRef, useState } from 'react'
 import { flushSync } from 'react-dom'
 import './App.css'
+import binanceLogo from './assets/logos/binance.png'
 import bybitLogo from './assets/logos/bybit.png'
 
 // At most `decimals` decimals and `maxDigits` digits in total
@@ -227,7 +228,7 @@ const DEFAULT_RATES = {
 const RATE_OPTIONS = [
   { key: 'bcb', label: 'BCB', prefix: 'BCB' },
   { key: 'paralelo', label: 'PARALELO', prefix: 'PARALELO' },
-  { key: 'binance', label: 'BINANCE', prefix: 'BINANCE' },
+  { key: 'binance', label: 'BINANCE', prefix: 'BINANCE', logo: binanceLogo },
   { key: 'bybit', label: 'BYBIT', prefix: 'BYBIT', logo: bybitLogo },
   { key: 'airtm', label: 'AIRTM', prefix: 'AIRTM' },
 ]
