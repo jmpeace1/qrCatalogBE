@@ -511,10 +511,13 @@ function App() {
 
   tcChangeRef.current = changeTc
 
-  const descriptionText =
+  // Shown on two lines: the conversion, then "a TC …"
+  const descriptionMain =
     rateMode === 'venta'
-      ? `${usd || '0.00'} dólares son Bs. ${bob || '0.00'} a TC ${tc || '0.00'}`
-      : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares a TC ${tc || '0.00'}`
+      ? `${usd || '0.00'} dólares son Bs. ${bob || '0.00'}`
+      : `Bs. ${bob || '0.00'} son ${usd || '0.00'} dólares`
+  const descriptionTc = `a TC ${tc || '0.00'}`
+  const descriptionText = `${descriptionMain} ${descriptionTc}`
 
   const handleCopy = async () => {
     if (await copyText(descriptionText)) {
@@ -626,7 +629,11 @@ function App() {
             {/* Keyed array so each field keeps its state when they swap places */}
             {rateMode === 'venta' ? [usdField, bobField] : [bobField, usdField]}
             <div className="description-row">
-              <p className="description">{descriptionText}</p>
+              <p className="description">
+                {descriptionMain}
+                <br />
+                {descriptionTc}
+              </p>
               <button
                 type="button"
                 className="copy-button"
