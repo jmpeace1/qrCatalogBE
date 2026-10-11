@@ -5,6 +5,7 @@ import airtmLogo from './assets/logos/airtm.svg'
 import binanceLogo from './assets/logos/binance.png'
 import bcbLogo from './assets/logos/bcb.png'
 import bybitLogo from './assets/logos/bybit.png'
+import paraleloLogo from './assets/logos/paralelo.svg'
 
 // At most `decimals` decimals and `maxDigits` digits in total
 const isValid = (text, maxDigits, decimals = 2) =>
@@ -229,7 +230,12 @@ const DEFAULT_RATES = {
 // from <PREFIX>_COMPRA / <PREFIX>_VENTA in last.json.
 const RATE_OPTIONS = [
   { key: 'bcb', label: 'BCB', prefix: 'BCB', logo: bcbLogo },
-  { key: 'paralelo', label: 'PARALELO', prefix: 'PARALELO' },
+  {
+    key: 'paralelo',
+    label: 'PARALELO',
+    prefix: 'PARALELO',
+    logo: paraleloLogo,
+  },
   { key: 'binance', label: 'BINANCE', prefix: 'BINANCE', logo: binanceLogo },
   { key: 'bybit', label: 'BYBIT', prefix: 'BYBIT', logo: bybitLogo },
   { key: 'airtm', label: 'AIRTM', prefix: 'AIRTM', logo: airtmLogo },
