@@ -87,6 +87,8 @@
 
 .fields {
   --quick-w: 96px;
+  /* BOB/USD inputs ~30% narrower than the full remaining width (292px) */
+  --input-w: 204px;
   width: 100%;
   align-items: center;
   display: flex;
@@ -105,12 +107,19 @@
 .field-row {
   display: flex;
   align-items: stretch;
+  justify-content: flex-end;
   gap: 6px;
+}
+
+.field-row .amount-input {
+  flex: none;
+  width: var(--input-w);
 }
 
 .field-head {
   display: grid;
-  grid-template-columns: 1fr var(--quick-w);
+  grid-template-columns: var(--input-w) var(--quick-w);
+  justify-content: end;
   align-items: end;
   gap: 6px;
 }
