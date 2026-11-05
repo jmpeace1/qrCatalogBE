@@ -1,0 +1,201 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>SuperCalc Privacy Policy</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Anton&family=IBM+Plex+Sans:ital,wght@0,400;0,600;1,400&family=VT323&display=swap">
+<style>
+  /* Layout: one readable column, like the app's receipt — a wordmark, then plain sections. */
+  :root {
+    --bg: #111111;
+    --surface: #1a1a1b;
+    --fg: #e6e6e6;
+    --muted: #9a9a9e;
+    --line: #2c2c30;
+    --accent: #00ccff;
+    --pink: #ff1493;
+    --green: #00e676;
+    --orange: #ff9100;
+    --font-display: "Anton", "Impact", "Arial Narrow", sans-serif;
+    --font-body: "IBM Plex Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-label: "VT323", "Courier New", ui-monospace, monospace;
+    color-scheme: dark;
+  }
+  @media (prefers-color-scheme: light) {
+    :root:not([data-theme="dark"]) {
+      --bg: #ffffff; --surface: #f3f5f6; --fg: #17171a; --muted: #5d5d63; --line: #e1e3e6;
+      --accent: #0072a3; --pink: #c4006d; --green: #00813f; --orange: #b35c00;
+      color-scheme: light;
+    }
+  }
+  :root[data-theme="light"] {
+    --bg: #ffffff; --surface: #f3f5f6; --fg: #17171a; --muted: #5d5d63; --line: #e1e3e6;
+    --accent: #0072a3; --pink: #c4006d; --green: #00813f; --orange: #b35c00;
+    color-scheme: light;
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    padding-left: max(16px, env(safe-area-inset-left, 0px));
+    padding-right: max(16px, env(safe-area-inset-right, 0px));
+    padding-block: 40px 64px;
+  }
+  .page { max-width: 42rem; margin: 0 auto; display: flex; flex-direction: column; gap: 40px; }
+
+  header { display: flex; flex-direction: column; gap: 18px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand svg { width: 44px; height: 44px; flex: none; }
+  .wordmark { font-family: var(--font-display); font-size: 34px; letter-spacing: 0.02em; line-height: 1; }
+  h1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(40px, 9vw, 60px); line-height: 1.05; margin: 0; text-wrap: balance; letter-spacing: 0.01em; }
+  .meta { font-family: var(--font-label); font-size: 22px; color: var(--muted); letter-spacing: 0.04em; margin: 0; }
+
+  .short {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 22px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  .short h2 { margin: 0; }
+  .short ul { margin: 0; padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+
+  section { display: flex; flex-direction: column; gap: 12px; }
+  h2 {
+    font-family: var(--font-label); font-weight: 400; font-size: 26px; letter-spacing: 0.05em;
+    text-transform: uppercase; margin: 0; color: var(--fg);
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2::before { content: ""; width: 14px; height: 4px; border-radius: 2px; background: var(--accent); flex: none; }
+  section:nth-of-type(4n+2) h2::before { background: var(--green); }
+  section:nth-of-type(4n+3) h2::before { background: var(--pink); }
+  section:nth-of-type(4n+4) h2::before { background: var(--orange); }
+  p, ul { margin: 0; }
+  ul { padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+  a { color: var(--accent); text-underline-offset: 3px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  strong { font-weight: 600; }
+
+  .table-wrap { overflow-x: auto; border: 1px solid var(--line); border-radius: 10px; }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; min-width: 30rem; }
+  th, td { text-align: left; vertical-align: top; padding: 10px 14px; border-bottom: 1px solid var(--line); }
+  tr:last-child td { border-bottom: 0; }
+  th { font-family: var(--font-label); font-weight: 400; font-size: 19px; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); background: var(--surface); }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+
+  .contact { font-family: var(--font-label); font-size: 24px; letter-spacing: 0.03em; user-select: all; }
+  footer { border-top: 1px dashed var(--line); padding-top: 20px; color: var(--muted); font-size: 15px; }
+</style>
+
+<div class="page">
+  <header>
+    <div class="brand" aria-label="SuperCalc">
+      <svg viewBox="22 22 64 64" aria-hidden="true">
+        <path fill="#00CCFF" d="M54,54 L32.787,32.787 A30,30 0 0,1 75.213,32.787 Z"/>
+        <path fill="#00E676" d="M54,54 L75.213,32.787 A30,30 0 0,1 75.213,75.213 Z"/>
+        <path fill="#FF1493" d="M54,54 L75.213,75.213 A30,30 0 0,1 32.787,75.213 Z"/>
+        <path fill="#FF9100" d="M54,54 L32.787,75.213 A30,30 0 0,1 32.787,32.787 Z"/>
+        <path fill="none" stroke="#111111" stroke-width="2.6" d="M32.787,32.787 L75.213,75.213 M32.787,75.213 L75.213,32.787"/>
+        <path fill="none" stroke="#111111" stroke-width="2.6" stroke-linecap="round" d="M49.8,37.2 L58.2,37.2 M66.6,54 L75,54 M70.8,49.8 L70.8,58.2 M50.85,67.65 L57.15,73.95 M50.85,73.95 L57.15,67.65 M33,54 L41.4,54"/>
+        <path fill="#111111" d="M52.5,33.6 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0 M52.5,40.8 a1.5,1.5 0 1,0 3,0 a1.5,1.5 0 1,0 -3,0"/>
+      </svg>
+      <span class="wordmark">SUPERCALC</span>
+    </div>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Effective November 5, 2026 · SuperCalc for Android</p>
+  </header>
+
+  <div class="short">
+    <h2>In short</h2>
+    <ul>
+      <li>Your calculations, labels and settings stay on your phone. SuperCalc has no account and no server of its own.</li>
+      <li>The camera is used only while you read a number with it. Pictures are read on the phone and never saved or sent.</li>
+      <li>Google ML Kit, which reads the numbers, sends Google basic diagnostics (device model, app version, performance and error codes). It never sends your pictures or what they say.</li>
+      <li>No ads, no tracking, and nothing is sold.</li>
+    </ul>
+  </div>
+
+  <section>
+    <h2>What SuperCalc keeps on your phone</h2>
+    <p>Everything below is stored in the app's private storage on your device. It is not sent anywhere by SuperCalc.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Data</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td>History</td><td>Your calculations and results, with the time of each, and any pins, labels and line numbers you add.</td></tr>
+          <tr><td>Backup slots</td><td>Up to three copies of your history that you save from the History menu.</td></tr>
+          <tr><td>Settings</td><td>Your choices, such as decimals, colors, which pads show and where you placed them.</td></tr>
+          <tr><td>Receipt images</td><td>Made only when you choose Export, kept in temporary storage for sharing, and cleared by Android over time.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>You can delete your history from the History menu at any time. Uninstalling SuperCalc removes all of this data from your phone.</p>
+  </section>
+
+  <section>
+    <h2>Camera</h2>
+    <p>SuperCalc asks for the camera only when you tap the camera on the advanced pad. While it is on, the picture shows in the input area and Google ML Kit's text recognition, which runs on your phone, looks for a number in it. The number found is typed into the calculator. Pictures are not stored, and neither they nor the text read from them leave your phone.</p>
+    <p>You can turn off camera access at any time in Android's settings. Everything else in SuperCalc works without it.</p>
+  </section>
+
+  <section>
+    <h2>Diagnostics sent by Google ML Kit</h2>
+    <p>Reading numbers uses Google ML Kit. According to <a href="https://developers.google.com/ml-kit/android-data-disclosure" target="_blank" rel="noopener">Google's ML Kit data disclosure</a>, ML Kit sends Google the following for diagnostics and usage analytics, encrypted over HTTPS, and does not pass it to third parties:</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Data</th><th>Examples</th></tr></thead>
+        <tbody>
+          <tr><td>Device information</td><td>Manufacturer, model, Android version and build, hardware accelerators</td></tr>
+          <tr><td>App information</td><td>Package name and app version</td></tr>
+          <tr><td>Identifier</td><td>A per-installation identifier, not meant to identify you or your device</td></tr>
+          <tr><td>Performance</td><td>How long reading took, image format and size, feature version, error codes</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>This data is handled under <a href="https://policies.google.com/privacy" target="_blank" rel="noopener">Google's Privacy Policy</a>. SuperCalc itself does not receive it.</p>
+  </section>
+
+  <section>
+    <h2>Android backup</h2>
+    <p>If backup is turned on for your Google account, Android may include SuperCalc's data (history, backup slots and settings) in your device backup and restore it on a new phone. This is done by Android and Google under your backup settings, which you can change in Android's settings.</p>
+  </section>
+
+  <section>
+    <h2>Sharing</h2>
+    <p>SuperCalc shares something only when you ask it to: a receipt image you export, or a number you copy. Where it goes is up to you and the app you pick in Android's share menu.</p>
+  </section>
+
+  <section>
+    <h2>What SuperCalc does not do</h2>
+    <ul>
+      <li>It shows no ads and has no in-app purchases.</li>
+      <li>It has no accounts, no sign-in and no server.</li>
+      <li>It does not use analytics or tracking of its own.</li>
+      <li>It does not sell, rent or trade any data.</li>
+      <li>It does not ask for your location, contacts, files or microphone.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Children</h2>
+    <p>SuperCalc is a general calculator and is not directed at children under 13. It does not knowingly collect personal information from anyone, including children.</p>
+  </section>
+
+  <section>
+    <h2>Changes</h2>
+    <p>If this policy changes, the new version will be posted here with a new effective date. A change that affects what data is handled will also be noted in the app's release notes on Google Play.</p>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>For any question about this policy or your data, write to the developer, Jose Paz:</p>
+    <p class="contact">jmpeace@gmail.com</p>
+  </section>
+
+  <footer>SuperCalc is developed by Jose Paz. Package name: com.edgemedia.supercalc.</footer>
+</div>
+
+</body></html>
