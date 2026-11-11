@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MiniQuiosco Privacy Policy</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap">
+<style>
+  /* Layout: one readable column, built like the app: a dark kiosk tile, page-gray background,
+     panels with the app's 12px corners, orange only for the marks and links. */
+  :root {
+    --page: #edf0f2;
+    --panel: #ffffff;
+    --ink: #111418;
+    --muted: #5a6269;
+    --line: #dde2e6;
+    --accent: #f26b1d;
+    --link: #a8430c;
+    --font-display: "Plus Jakarta Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --font-body: "Plus Jakarta Sans", "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    --radius: 12px;
+    color-scheme: light;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --page: #1c1c1e; --panel: #000000; --ink: #f2f2f4; --muted: #a3a8ae; --line: #34343a;
+      --accent: #f26b1d; --link: #ff9a5c;
+      color-scheme: dark;
+    }
+  }
+  :root[data-theme="dark"] {
+    --page: #1c1c1e; --panel: #000000; --ink: #f2f2f4; --muted: #a3a8ae; --line: #34343a;
+    --accent: #f26b1d; --link: #ff9a5c;
+    color-scheme: dark;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--page);
+    color: var(--ink);
+    font-family: var(--font-body);
+    font-size: 17px;
+    line-height: 1.6;
+    padding: 40px 16px 64px;
+  }
+  .page { max-width: 42rem; margin: 0 auto; display: flex; flex-direction: column; gap: 36px; }
+  header { display: flex; flex-direction: column; gap: 16px; }
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand svg { width: 48px; height: 48px; flex: none; border-radius: var(--radius); }
+  .wordmark { font-family: var(--font-display); font-weight: 800; font-size: 26px; letter-spacing: -0.01em; line-height: 1; }
+  h1 { font-family: var(--font-display); font-weight: 800; font-size: clamp(36px, 9vw, 52px); line-height: 1.08; letter-spacing: -0.02em; margin: 0; text-wrap: balance; }
+  .meta { color: var(--muted); font-size: 15px; margin: 0; }
+  .short {
+    background: var(--panel);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    display: flex; flex-direction: column; gap: 10px;
+  }
+  section { display: flex; flex-direction: column; gap: 12px; }
+  h2 {
+    font-family: var(--font-display); font-weight: 800; font-size: 21px; line-height: 1.25;
+    margin: 0; text-wrap: balance;
+    display: flex; align-items: center; gap: 10px;
+  }
+  h2::before { content: ""; width: 12px; height: 12px; border-radius: 4px; background: var(--accent); flex: none; }
+  p, ul { margin: 0; }
+  ul { padding-left: 1.2em; display: flex; flex-direction: column; gap: 6px; }
+  a { color: var(--link); text-underline-offset: 3px; }
+  a:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 2px; }
+  strong { font-weight: 600; }
+  .table-wrap { overflow-x: auto; background: var(--panel); border-radius: var(--radius); }
+  table { border-collapse: collapse; width: 100%; font-size: 15px; min-width: 30rem; }
+  th, td { text-align: left; vertical-align: top; padding: 11px 16px; border-bottom: 1px solid var(--line); }
+  tr:last-child td { border-bottom: 0; }
+  th { font-weight: 600; font-size: 13px; letter-spacing: 0.04em; text-transform: uppercase; color: var(--muted); }
+  td:first-child { font-weight: 600; white-space: nowrap; }
+  .contact { font-weight: 600; font-size: 19px; user-select: all; }
+  footer { border-top: 1px solid var(--line); padding-top: 20px; color: var(--muted); font-size: 15px; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <header>
+    <div class="brand" aria-label="MiniQuiosco">
+      <svg viewBox="0 0 108 108" aria-hidden="true">
+        <rect width="108" height="108" fill="#16181B"/>
+        <path d="M34 78 L29 93 L48 80 Z" fill="#FFFFFF"/>
+        <rect x="24" y="38" width="60" height="44" rx="12" fill="#FFFFFF"/>
+        <circle cx="37" cy="62" r="4" fill="#F26B1D"/><rect x="45" y="59.5" width="28" height="5" rx="2.5" fill="#C9CED6"/>
+        <circle cx="37" cy="72" r="4" fill="#F26B1D"/><rect x="45" y="69.5" width="20" height="5" rx="2.5" fill="#C9CED6"/>
+        <path fill="#F26B1D" d="M18 28h12v16a6 6 0 0 1-12 0zM42 28h12v16a6 6 0 0 1-12 0zM66 28h12v16a6 6 0 0 1-12 0z"/>
+        <path fill="#FFFFFF" d="M30 28h12v16a6 6 0 0 1-12 0zM54 28h12v16a6 6 0 0 1-12 0zM78 28h12v16a6 6 0 0 1-12 0z"/>
+        <rect x="16" y="22" width="76" height="7" rx="3.5" fill="#F26B1D"/>
+      </svg>
+      <span class="wordmark">MiniQuiosco</span>
+    </div>
+    <h1>Privacy Policy</h1>
+    <p class="meta">Effective November 11, 2026 · MiniQuiosco for Android</p>
+  </header>
+
+  <div class="short">
+    <h2>In short</h2>
+    <ul>
+      <li>Your catalog, photos and store details stay on your phone. MiniQuiosco has no account and no server of its own.</li>
+      <li>The app has no permission to use the internet. It cannot send anything anywhere by itself.</li>
+      <li>Something leaves your phone only when you share it, through WhatsApp or the app you pick.</li>
+      <li>No ads, no tracking, and nothing is sold.</li>
+    </ul>
+  </div>
+
+  <section>
+    <h2>What MiniQuiosco keeps on your phone</h2>
+    <p>Everything below is stored in the app's private storage on your device. MiniQuiosco does not send it anywhere.</p>
+    <div class="table-wrap">
+      <table>
+        <thead><tr><th>Data</th><th>What it is</th></tr></thead>
+        <tbody>
+          <tr><td>Catalog</td><td>Your products: names, descriptions, prices, categories, favorites, whether each is available, and when it was created and last changed.</td></tr>
+          <tr><td>Store profile</td><td>Your store's name, the WhatsApp number clients order to, and your MiniQuiosco ID.</td></tr>
+          <tr><td>Photos</td><td>The product photos you add, your store logo and your cover photo. The app keeps its own resized copies.</td></tr>
+          <tr><td>Settings</td><td>Your choices, such as language, light or dark appearance and how product cards look.</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>You can delete any product, photo or category in the app at any time. Uninstalling MiniQuiosco removes all of this data from your phone.</p>
+  </section>
+
+  <section>
+    <h2>Photos and camera</h2>
+    <p>MiniQuiosco does not ask for permission to use your camera or to read your photo library. When you add a photo, Android's own photo picker or your phone's camera app opens, and MiniQuiosco receives only the photos you choose or take there. It cannot see the rest of your gallery.</p>
+  </section>
+
+  <section>
+    <h2>Sharing and publishing</h2>
+    <p>MiniQuiosco shares something only when you tap Share or Publish. It then hands a message to WhatsApp, or to the app you pick in Android's share menu. The message can include:</p>
+    <ul>
+      <li>the products you chose, with their names, descriptions and prices;</li>
+      <li>the photos you selected, as copies stamped with "MiniQuiosco" and your store's ID;</li>
+      <li>your store's name, MiniQuiosco ID and the WhatsApp number you entered, so clients can order from you.</li>
+    </ul>
+    <p>Who receives it is up to you. Once a message is sent, it is handled by that app under its own privacy policy, for example <a href="https://www.whatsapp.com/legal/privacy-policy" target="_blank" rel="noopener">WhatsApp's</a>. The stamped photo copies are kept in temporary storage and replaced the next time you share.</p>
+  </section>
+
+  <section>
+    <h2>No internet connection</h2>
+    <p>This version of MiniQuiosco does not have Android's internet permission, so it cannot connect to any server. Your MiniQuiosco ID is assigned inside the app. Publishing your catalog means sharing it through another app, as described above.</p>
+  </section>
+
+  <section>
+    <h2>Android backup</h2>
+    <p>If backup is turned on for your Google account, Android may include MiniQuiosco's data (catalog, store profile, photos and settings) in your device backup and restore it on a new phone. This is done by Android and Google under your backup settings, which you can change in Android's settings.</p>
+  </section>
+
+  <section>
+    <h2>What MiniQuiosco does not do</h2>
+    <ul>
+      <li>It shows no ads and has no in-app purchases.</li>
+      <li>It has no accounts and no sign-in.</li>
+      <li>It does not use analytics or tracking.</li>
+      <li>It does not sell, rent or trade any data.</li>
+      <li>It does not ask for your location, contacts, microphone, camera or files.</li>
+      <li>It does not collect anything about your clients. Their orders reach you in WhatsApp, not in MiniQuiosco.</li>
+    </ul>
+  </section>
+
+  <section>
+    <h2>Children</h2>
+    <p>MiniQuiosco is a tool for store owners and is not directed at children under 13. It does not knowingly collect personal information from anyone, including children.</p>
+  </section>
+
+  <section>
+    <h2>Changes</h2>
+    <p>If this policy changes, the new version will be posted here with a new effective date. If a future version of MiniQuiosco starts storing catalogs online, this policy will be updated before that version is released, and the change will be noted in the app's release notes on Google Play.</p>
+  </section>
+
+  <section>
+    <h2>Contact</h2>
+    <p>For any question about this policy or your data, write to the developer, Jose Paz:</p>
+    <p class="contact">jmpeace@gmail.com</p>
+  </section>
+
+  <footer>MiniQuiosco is developed by Jose Paz. Package name: com.edgemedia.miniquiosco.</footer>
+
+</div>
+</body>
+</html>
